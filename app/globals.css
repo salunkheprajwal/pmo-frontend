@@ -29,9 +29,20 @@
   --warning: #f59e0b;
   --warning-10: rgba(245, 158, 11, 0.1);
 
+  /* Edit Button Colors */
+  --edit-bg: #eff6ff; /* blue-50 */
+  --edit-text: #2563eb; /* blue-600 */
+  --edit-hover-bg: #2563eb; /* blue-600 */
+  --edit-hover-text: #ffffff;
+
+  /* Delete Button Colors */
+  --delete-bg: #fef2f2; /* red-50 */
+  --delete-text: #ef4444; /* red-600 */
+  --delete-hover-bg: #ef4444; /* red-600 */
+  --delete-hover-text: #ffffff;
+
   /* Backdrops */
   --backdrop: rgba(0,0,0,0.3);
-
 }
 
 body {
@@ -63,6 +74,18 @@ html, body {
 .border-default { border-color: var(--border); }
 .border-muted { border-color: var(--border-muted); }
 .bg-backdrop { background: var(--backdrop); }
+
+/* Edit Button Classes */
+.bg-edit { background-color: var(--edit-bg); }
+.text-edit { color: var(--edit-text); }
+.hover-bg-edit:hover { background-color: var(--edit-hover-bg); }
+.hover-text-edit:hover { color: var(--edit-hover-text); }
+
+/* Delete Button Classes */
+.bg-delete { background-color: var(--delete-bg); }
+.text-delete { color: var(--delete-text); }
+.hover-bg-delete:hover { background-color: var(--delete-hover-bg); }
+.hover-text-delete:hover { color: var(--delete-hover-text); }
 
 /* Small helpers for svg fills using CSS variables -- used in JSX via style prop */
 .svg-fill-primary { fill: var(--primary); }

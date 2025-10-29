@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Button from '../Button';
+import { Pencil, Trash2 } from 'lucide-react';
 
 interface OrganizationCardProps {
   organization: {
@@ -62,21 +63,23 @@ export default function OrganizationCard({ organization, onEdit, onDelete }: Org
         </span>
       </div>
 
-      <div className="mt-4 flex justify-end space-x-3">
-        <Button
-          onClick={() => onEdit(organization.id)}
-          className="bg-accent-50 text-accent hover:bg-accent hover:text-primary-foreground"
-        >
-          Edit
-        </Button>
-        <Button
-          onClick={handleDelete}
-          disabled={isDeleting}
-          className="bg-danger/10 text-danger hover:bg-danger hover:text-primary-foreground"
-        >
-          {isDeleting ? 'Deleting...' : 'Delete'}
-        </Button>
-      </div>
+    <div className="mt-4 flex justify-end space-x-2">
+  <Button
+    onClick={() => onEdit(organization.id)}
+    className=" p-2"
+    aria-label="Edit organization"
+  >
+    <Pencil className="w-4 h-4" />
+  </Button>
+  <Button
+    onClick={handleDelete}
+    disabled={isDeleting}
+    className=" p-2 disabled:opacity-50"
+    aria-label="Delete organization"
+  >
+    <Trash2 className="w-4 h-4" />
+  </Button>
+</div>
     </div>
   );
 }
