@@ -1,20 +1,96 @@
 'use client'
 
-import React from 'react'
+import React, { useState, useEffect } from 'react'
+import { getProfile, decodeToken } from '@/app/utils/api'
 
 interface HeaderProps {
   toggleSidebar: () => void
 }
 
+interface UserProfile {
+  id: number
+  name: string
+  email: string
+  role: string
+  company: {
+    id: number
+    name: string
+    address: string
+  } | null
+  designation: {
+    id: number
+    name: string
+    description: string
+  } | null
+  isVerified: boolean
+}
+
 const Header = ({ toggleSidebar }: HeaderProps) => {
+  const [profile, setProfile] = useState<UserProfile | null>(null)
+  const [loading, setLoading] = useState(true)
+  const [showDropdown, setShowDropdown] = useState(false)
+
+  useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        // Try both localStorage and sessionStorage for compatibility
+        const token = localStorage.getItem('token') || sessionStorage.getItem('token') || localStorage.getItem('authToken') || sessionStorage.getItem('authToken')
+        if (!token) {
+          setLoading(false)
+          return
+        }
+
+        // Try to get profile from API, fallback to decode token if API fails
+        let user: any = null
+        let ok = false
+        try {
+          const resp = await getProfile(token)
+          ok = resp.ok && resp.data.status
+          if (ok) user = resp.data.data
+        } catch {}
+
+        if (!ok) {
+          // fallback: decode token for name/email
+          user = decodeToken(token)
+        }
+
+        if (user) {
+          setProfile({
+            id: user.id || 0,
+            name: user.name || user.username || user.email || 'User',
+            email: user.email || '',
+            role: user.role || '',
+            company: user.company || null,
+            designation: user.designation || null,
+            isVerified: user.isVerified || false,
+          })
+        }
+      } catch (error) {
+        console.error('Failed to fetch profile:', error)
+      } finally {
+        setLoading(false)
+      }
+    }
+    fetchProfile()
+  }, [])
+
+  const getInitials = (name: string) => {
+    return name
+      .split(' ')
+      .map(n => n[0])
+      .join('')
+      .toUpperCase()
+      .slice(0, 2)
+  }
+
   return (
-    <header className="bg-white border-b border-gray-200 px-4 py-3">
+    <header className="bg-surface border-b border-default px-4 py-3">
       <div className="flex items-center justify-between">
         {/* Left side */}
         <div className="flex items-center gap-3">
           <button
             onClick={toggleSidebar}
-            className="md:hidden text-gray-500 hover:text-gray-700 p-1"
+            className="md:hidden text-muted hover:text-foreground p-1"
           >
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
@@ -25,7 +101,7 @@ const Header = ({ toggleSidebar }: HeaderProps) => {
             <input
               type="search"
               placeholder="Search..."
-              className="w-64 pl-9 pr-3 py-1.5 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+              className="w-64 pl-9 pr-3 py-1.5 text-sm border border-muted rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
             />
             <svg 
               className="absolute left-3 top-2 w-4 h-4 text-gray-400" 
@@ -40,23 +116,57 @@ const Header = ({ toggleSidebar }: HeaderProps) => {
 
         {/* Right side */}
         <div className="flex items-center gap-2">
-          {/* Notifications */}
-          <button className="relative p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg">
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
-            </svg>
-            <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full"></span>
-          </button>
 
           {/* Profile dropdown */}
-          <button className="flex items-center gap-2 p-1.5 hover:bg-gray-100 rounded-lg">
-            <div className="w-7 h-7 bg-pink-950 rounded-full flex items-center justify-center">
-              <span className="text-white text-xs font-medium">JD</span>
-            </div>
-            <svg className="w-4 h-4 text-gray-500 hidden sm:block" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-            </svg>
-          </button>
+          <div className="relative">
+            <button 
+              onClick={() => setShowDropdown(!showDropdown)}
+              className="flex items-center gap-2 p-1.5 hover:bg-accent-50 rounded-lg"
+            >
+              <div className="w-7 h-7 bg-primary rounded-full flex items-center justify-center">
+                <span className="text-primary-foreground text-xs font-medium">
+                  {loading ? '...' : profile ? getInitials(profile.name) : 'U'}
+                </span>
+              </div>
+              <svg className="w-4 h-4 text-muted hidden sm:block" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
+
+            {/* Dropdown menu */}
+            {showDropdown && profile && (
+              <div className="absolute right-0 mt-2 w-64 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50">
+                <div className="px-4 py-3 border-b border-gray-100">
+                  <p className="text-sm font-medium text-gray-900">{profile.name}</p>
+                  <p className="text-xs text-gray-500">{profile.email}</p>
+                  {profile.designation && (
+                    <p className="text-xs text-gray-500 mt-1">{profile.designation.name}</p>
+                  )}
+                  {profile.role && (
+                    <span className="inline-block mt-1 px-2 py-0.5 text-xs rounded-full bg-blue-100 text-blue-800">
+                      {profile.role}
+                    </span>
+                  )}
+                </div>
+                
+                {profile.company && (
+                  <div className="px-4 py-2 border-b border-gray-100">
+                    <p className="text-xs text-gray-500">Company</p>
+                    <p className="text-sm text-gray-900">{profile.company.name}</p>
+                  </div>
+                )}
+
+                <div className="py-1">
+                  <button className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">
+                    Profile Settings
+                  </button>
+                  <button className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-50">
+                    Logout
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </header>

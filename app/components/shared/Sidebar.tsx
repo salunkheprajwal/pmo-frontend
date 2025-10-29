@@ -23,6 +23,7 @@ const Sidebar = ({ isOpen, setIsOpen }: SidebarProps) => {
 
   const menuItems = [
     { name: 'Dashboard', icon: LayoutDashboard, path: '/authenticated/dashboard' },
+    { name: 'Organization', icon: Settings, path: '/authenticated/organization' },
     { name: 'Projects', icon: FolderKanban, path: '/projects' },
     { name: 'Tasks', icon: CheckSquare, path: '/tasks' },
     { name: 'Team', icon: Users, path: '/team' },
@@ -35,29 +36,29 @@ const Sidebar = ({ isOpen, setIsOpen }: SidebarProps) => {
       {/* Mobile overlay */}
       {isOpen && (
         <div
-          className="fixed inset-0 bg-black/30 z-20 md:hidden"
+          className="fixed inset-0 bg-backdrop z-20 md:hidden"
           onClick={() => setIsOpen(false)}
         />
       )}
 
       {/* Sidebar */}
       <aside
-        className={`fixed md:static inset-y-0 left-0 z-30 w-64 bg-white border-r border-gray-200 transform transition-transform duration-300 ease-in-out ${
+        className={`fixed md:static inset-y-0 left-0 z-30 w-64 bg-surface border-r border-default transform transition-transform duration-300 ease-in-out ${
           isOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'
         }`}
       >
         <div className="flex flex-col h-full">
           {/* Logo */}
-          <div className="flex items-center justify-between p-4 border-b border-gray-200">
+          <div className="flex items-center justify-between p-4 border-b border-default">
             <div className="flex items-center gap-2">
-              <div className="w-8 h-8 bg-pink-950 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-lg">P</span>
+              <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
+                <span className="text-primary-foreground font-bold text-lg">P</span>
               </div>
-              <span className="font-bold text-gray-900">PMO</span>
+              <span className="font-bold text-foreground">PMO</span>
             </div>
             <button
               onClick={() => setIsOpen(false)}
-              className="md:hidden text-gray-500 hover:text-gray-700"
+              className="md:hidden text-muted hover:text-foreground"
             >
               <X size={20} />
             </button>
@@ -75,8 +76,8 @@ const Sidebar = ({ isOpen, setIsOpen }: SidebarProps) => {
                       href={item.path}
                       className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
                         isActive
-                          ? 'bg-blue-50 text-blue-600'
-                          : 'text-gray-700 hover:bg-gray-50'
+                          ? 'bg-accent-50 text-accent'
+                          : 'text-muted hover:bg-accent-50'
                       }`}
                     >
                       <Icon size={18} />
@@ -89,14 +90,14 @@ const Sidebar = ({ isOpen, setIsOpen }: SidebarProps) => {
           </nav>
 
           {/* User profile */}
-          <div className="p-3 border-t border-gray-200">
-            <div className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-50 cursor-pointer">
-              <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center">
-                <span className="text-white text-sm font-medium">JD</span>
+          <div className="p-3 border-t border-default">
+            <div className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-accent-50 cursor-pointer">
+              <div className="w-8 h-8 bg-accent rounded-full flex items-center justify-center">
+                <span className="text-primary-foreground text-sm font-medium">JD</span>
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-gray-900 truncate">John Doe</p>
-                <p className="text-xs text-gray-500 truncate">john@example.com</p>
+                <p className="text-sm font-medium text-foreground truncate">John Doe</p>
+                <p className="text-xs text-muted-2 truncate">john@example.com</p>
               </div>
             </div>
           </div>

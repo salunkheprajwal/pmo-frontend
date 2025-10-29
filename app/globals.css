@@ -3,15 +3,41 @@
 @import "tailwindcss";
 
 :root {
+  /* Base colors / design tokens */
   --background: #ffffff;
-  --foreground: #171717;
+  --surface: #ffffff;
+  --foreground: #0f172a; /* slate-900 */
   --font-jakarta-sans: 'Plus Jakarta Sans', sans-serif;
+
+  /* Brand / accents */
+  --primary: #7a0d12; /* pink-600 */
+  --primary-foreground: #ffffff;
+  --accent: #2563eb; /* blue-600 */
+  --accent-50: #eff6ff; /* blue-50 */
+
+  /* Greys / semantic */
+  --muted: #374151; /* gray-700 */
+  --muted-2: #9ca3af; /* gray-400 */
+  --border: #e5e7eb; /* gray-200 */
+  --border-muted: #d1d5db; /* gray-300 */
+
+  /* Status */
+  --danger: #ef4444;
+  --danger-10: rgba(239, 68, 68, 0.1);
+  --success: #10b981;
+  --success-10: rgba(16, 185, 129, 0.1);
+  --warning: #f59e0b;
+  --warning-10: rgba(245, 158, 11, 0.1);
+
+  /* Backdrops */
+  --backdrop: rgba(0,0,0,0.3);
+
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: 'Plus Jakarta Sans', Arial, Helvetica, sans-serif;
+  font-family: var(--font-jakarta-sans);
 }
 
 html, body {
@@ -22,3 +48,25 @@ html, body {
 * {
   box-sizing: border-box;
 }
+
+/* Utility classes that map to our design tokens (safe, non-conflicting names) */
+.bg-primary { background-color: var(--primary); }
+.text-primary { color: var(--primary); }
+.text-primary-foreground { color: var(--primary-foreground); }
+.bg-accent { background-color: var(--accent); }
+.text-accent { color: var(--accent); }
+.bg-accent-50 { background-color: var(--accent-50); }
+.bg-surface { background-color: var(--surface); }
+.text-foreground { color: var(--foreground); }
+.text-muted { color: var(--muted); }
+.text-muted-2 { color: var(--muted-2); }
+.border-default { border-color: var(--border); }
+.border-muted { border-color: var(--border-muted); }
+.bg-backdrop { background: var(--backdrop); }
+
+/* Small helpers for svg fills using CSS variables -- used in JSX via style prop */
+.svg-fill-primary { fill: var(--primary); }
+.svg-fill-google-blue { fill: var(--google-blue); }
+.svg-fill-google-green { fill: var(--google-green); }
+.svg-fill-google-yellow { fill: var(--google-yellow); }
+.svg-fill-google-red { fill: var(--google-red); }
