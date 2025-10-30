@@ -27,7 +27,7 @@ const Sidebar = ({ isOpen, setIsOpen }: SidebarProps) => {
     { name: 'Organization', icon: Settings, path: '/authenticated/organization' },
     { name: 'Department', icon: FolderKanban, path: '/authenticated/department' },
     { name: 'Role', icon: Users, path: '/authenticated/role' },
-    { name: 'Designation', icon: BarChart3, path: '/authenticated/team' },
+    { name: 'Designation', icon: BarChart3, path: '/authenticated/designation' },
   ]
 
   return (
