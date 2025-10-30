@@ -12,7 +12,7 @@ import DepartmentList from '@/app/components/department/DepartmentList';
 import DepartmentForm from '@/app/components/department/DepartmentForm';
 import Modal from '@/app/components/shared/Modal';
 import ConfirmDialog from '@/app/components/shared/ConfirmDialog';
-import Button from '@/app/components/Button';
+import Button from '@/app/components/shared/Button';
 import { Plus } from 'lucide-react';
 
 export default function DepartmentPage() {

@@ -5,7 +5,7 @@ import OrganizationForm from '@/app/components/organization/OrganizationForm';
 import OrganizationList from '@/app/components/organization/OrganizationList';
 import ConfirmDialog from '@/app/components/shared/ConfirmDialog';
 import Modal from '@/app/components/shared/Modal';
-import Button from '@/app/components/Button';
+import Button from '@/app/components/shared/Button';
 import * as api from '@/app/utils/api';
 import { Organization } from '@/app/utils/api';
 import { Plus } from 'lucide-react';

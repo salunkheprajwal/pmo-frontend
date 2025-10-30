@@ -2,8 +2,8 @@
 
 import React, { useState } from 'react';
 import { Department, Organization, createDepartment, updateDepartment } from '@/app/utils/api';
-import Input from '../Input';
-import Button from '../Button';
+import Input from '../shared/Input';
+import Button from '../shared/Button';
 
 interface DepartmentFormProps {
   initialData?: Department;

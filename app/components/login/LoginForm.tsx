@@ -2,8 +2,8 @@
 
 import React, { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import Input from './Input'
-import Button from './Button'
+import Input from './shared/Input'
+import Button from './shared/Button'
 import { login as apiLogin, verify as apiVerify, resendOtp as apiResendOtp } from '@/app/utils/api'
 
 const LoginForm = () => {

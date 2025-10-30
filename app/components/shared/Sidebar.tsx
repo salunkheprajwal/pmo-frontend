@@ -10,7 +10,8 @@ import {
   Users, 
   BarChart3, 
   Settings,
-  X 
+  X, 
+  Plus
 } from 'lucide-react'
 
 interface SidebarProps {
@@ -25,7 +26,8 @@ const Sidebar = ({ isOpen, setIsOpen }: SidebarProps) => {
     { name: 'Dashboard', icon: LayoutDashboard, path: '/authenticated/dashboard' },
     { name: 'Organization', icon: Settings, path: '/authenticated/organization' },
     { name: 'Department', icon: FolderKanban, path: '/authenticated/department' },
-    
+    { name: 'Role', icon: Users, path: '/authenticated/role' },
+    { name: 'Designation', icon: BarChart3, path: '/authenticated/team' },
   ]
 
   return (
