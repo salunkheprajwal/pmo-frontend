@@ -2,6 +2,8 @@
 
 import React, { useState, useEffect } from 'react'
 import { getProfile, decodeToken } from '@/app/utils/api'
+import { useTheme } from '../ThemeProvider'
+import { Sun, Moon } from 'lucide-react'
 
 interface HeaderProps {
   toggleSidebar: () => void
@@ -29,6 +31,7 @@ const Header = ({ toggleSidebar }: HeaderProps) => {
   const [profile, setProfile] = useState<UserProfile | null>(null)
   const [loading, setLoading] = useState(true)
   const [showDropdown, setShowDropdown] = useState(false)
+  const { theme, toggleTheme } = useTheme()
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -116,6 +119,15 @@ const Header = ({ toggleSidebar }: HeaderProps) => {
 
         {/* Right side */}
         <div className="flex items-center gap-2">
+          {/* Theme toggle */}
+          <button
+            aria-label="Toggle theme"
+            onClick={toggleTheme}
+            className="p-1.5 rounded-lg text-muted hover:bg-accent-50"
+            title={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+          >
+            {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
+          </button>
 
           {/* Profile dropdown */}
           <div className="relative">
@@ -135,32 +147,32 @@ const Header = ({ toggleSidebar }: HeaderProps) => {
 
             {/* Dropdown menu */}
             {showDropdown && profile && (
-              <div className="absolute right-0 mt-2 w-64 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50">
-                <div className="px-4 py-3 border-b border-gray-100">
-                  <p className="text-sm font-medium text-gray-900">{profile.name}</p>
-                  <p className="text-xs text-gray-500">{profile.email}</p>
+              <div className="absolute right-0 mt-2 w-64 bg-surface rounded-lg shadow-lg border border-default py-2 z-50">
+                <div className="px-4 py-3 border-b border-default">
+                  <p className="text-sm font-medium text-foreground">{profile.name}</p>
+                  <p className="text-xs text-muted-2">{profile.email}</p>
                   {profile.designation && (
-                    <p className="text-xs text-gray-500 mt-1">{profile.designation.name}</p>
+                    <p className="text-xs text-muted-2 mt-1">{profile.designation.name}</p>
                   )}
                   {profile.role && (
-                    <span className="inline-block mt-1 px-2 py-0.5 text-xs rounded-full bg-blue-100 text-blue-800">
+                    <span className="inline-block mt-1 px-2 py-0.5 text-xs rounded-full bg-accent-50 text-accent">
                       {profile.role}
                     </span>
                   )}
                 </div>
                 
                 {profile.company && (
-                  <div className="px-4 py-2 border-b border-gray-100">
-                    <p className="text-xs text-gray-500">Company</p>
-                    <p className="text-sm text-gray-900">{profile.company.name}</p>
+                  <div className="px-4 py-2 border-b border-default">
+                    <p className="text-xs text-muted-2">Company</p>
+                    <p className="text-sm text-foreground">{profile.company.name}</p>
                   </div>
                 )}
 
                 <div className="py-1">
-                  <button className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">
+                  <button className="w-full text-left px-4 py-2 text-sm text-foreground hover:bg-accent-50">
                     Profile Settings
                   </button>
-                  <button className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-50">
+                  <button className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-accent-50">
                     Logout
                   </button>
                 </div>

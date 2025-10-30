@@ -24,11 +24,8 @@ const Sidebar = ({ isOpen, setIsOpen }: SidebarProps) => {
   const menuItems = [
     { name: 'Dashboard', icon: LayoutDashboard, path: '/authenticated/dashboard' },
     { name: 'Organization', icon: Settings, path: '/authenticated/organization' },
-    { name: 'Projects', icon: FolderKanban, path: '/projects' },
-    { name: 'Tasks', icon: CheckSquare, path: '/tasks' },
-    { name: 'Team', icon: Users, path: '/team' },
-    { name: 'Analytics', icon: BarChart3, path: '/analytics' },
-    { name: 'Settings', icon: Settings, path: '/settings' },
+    { name: 'Department', icon: FolderKanban, path: '/authenticated/department' },
+    
   ]
 
   return (

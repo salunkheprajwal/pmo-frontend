@@ -3,13 +3,12 @@
 import { useState, useEffect } from 'react';
 import OrganizationForm from '@/app/components/organization/OrganizationForm';
 import OrganizationList from '@/app/components/organization/OrganizationList';
-import OrganizationTable from '@/app/components/organization/OrganizationTable';
 import ConfirmDialog from '@/app/components/shared/ConfirmDialog';
 import Modal from '@/app/components/shared/Modal';
 import Button from '@/app/components/Button';
 import * as api from '@/app/utils/api';
 import { Organization } from '@/app/utils/api';
-import { LayoutGrid, Table2 } from 'lucide-react';
+import { Plus } from 'lucide-react';
 
 export default function OrganizationPage() {
   const [organizations, setOrganizations] = useState<Organization[]>([]);
@@ -18,8 +17,6 @@ export default function OrganizationPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [deleteId, setDeleteId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [view, setView] = useState<'card' | 'table'>('card');
-
   useEffect(() => {
     fetchOrganizations();
   }, []);
@@ -108,38 +105,20 @@ export default function OrganizationPage() {
   return (
     <div className="p-6 mx-auto">
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-8 gap-4">
-        <h1 className="text-2xl font-semibold text-gray-800">Organizations</h1>
-        <div className="flex items-center gap-2">
-          <div className="inline-flex rounded-md shadow-sm border border-gray-300 bg-surface">
-            <button
-              className={`px-4 py-2 rounded-l-md focus:outline-none transition-colors ${view === 'card' ? 'bg-accent-50 text-accent' : 'text-muted hover:bg-accent-50'}`}
-              onClick={() => setView('card')}
-              aria-pressed={view === 'card'}
-              type="button"
-              title="Card View"
-            >
-              <LayoutGrid size={20} />
-            </button>
-            <button
-              className={`px-4 py-2 rounded-r-md focus:outline-none transition-colors ${view === 'table' ? 'bg-accent-50 text-accent' : 'text-muted hover:bg-accent-50'}`}
-              onClick={() => setView('table')}
-              aria-pressed={view === 'table'}
-              type="button"
-              title="Table View"
-            >
-              <Table2 size={20} />
-            </button>
-          </div>
-          <Button
-            onClick={() => {
-              setSelectedOrg(null);
-              setIsFormOpen(true);
-            }}
-            className="bg-blue-600 text-white hover:bg-blue-700 ml-2"
-          >
-            Add Organization
-          </Button>
+        <div>
+          <h1 className="text-2xl font-semibold text-foreground">Organizations</h1>
+          <p className="text-muted-foreground mt-1">Manage your organizations</p>
         </div>
+        <Button
+          onClick={() => {
+            setSelectedOrg(null);
+            setIsFormOpen(true);
+          }}
+          className="bg-primary text-primary-foreground hover:bg-primary/90"
+        >
+          <Plus size={18} className="mr-2" />
+          Add Organization
+        </Button>
       </div>
 
       {error && (
@@ -148,19 +127,11 @@ export default function OrganizationPage() {
         </div>
       )}
 
-      {view === 'card' ? (
-        <OrganizationList
-          organizations={organizations}
-          onEdit={handleEdit}
-          onDelete={(id) => setDeleteId(id)}
-        />
-      ) : (
-        <OrganizationTable
-          organizations={organizations}
-          onEdit={handleEdit}
-          onDelete={(id) => setDeleteId(id)}
-        />
-      )}
+      <OrganizationList
+        organizations={organizations}
+        onEdit={handleEdit}
+        onDelete={(id: string) => setDeleteId(id)}
+      />
 
       <Modal
         isOpen={isFormOpen}

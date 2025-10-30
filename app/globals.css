@@ -51,6 +51,37 @@ body {
   font-family: var(--font-jakarta-sans);
 }
 
+/* Dark theme variables */
+[data-theme="dark"] {
+  --background: #000000; /* pure black as requested */
+  --surface: #0a0a0a; /* near-black surface */
+  --foreground: #e5e7eb; /* gray-200 */
+
+  --primary: #7a0d12;
+  --primary-foreground: #ffffff;
+  --accent: #60a5fa; /* blue-400 */
+  --accent-50: #111111; /* subtle dark highlight on black */
+
+  --muted: #9ca3af; /* gray-400 */
+  --muted-2: #6b7280; /* gray-500 */
+  --border: #1f2937; /* gray-800 */
+  --border-muted: #374151; /* gray-700 */
+
+  --danger: #ef4444;
+  --danger-10: rgba(239, 68, 68, 0.15);
+  --success: #10b981;
+  --success-10: rgba(16, 185, 129, 0.15);
+  --warning: #f59e0b;
+  --warning-10: rgba(245, 158, 11, 0.15);
+
+  --edit-bg: #0b1220;
+  --edit-text: #93c5fd; /* blue-300 */
+  --edit-hover-bg: #2563eb;
+  --edit-hover-text: #ffffff;
+
+  --backdrop: rgba(0,0,0,0.5);
+}
+
 html, body {
   height: 100%;
   overflow: hidden;

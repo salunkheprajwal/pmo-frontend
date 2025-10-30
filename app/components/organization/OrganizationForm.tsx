@@ -119,7 +119,7 @@ export default function OrganizationForm({ initialData, onSubmit, onCancel, isLo
           <label htmlFor="isActive" className="text-gray-700">Active Status</label>
         </div>
       </div>
-
+    
       <div className="flex justify-end space-x-4 pt-4">
         <Button
           type="button"
