@@ -88,19 +88,6 @@ const Sidebar = ({ isOpen, setIsOpen }: SidebarProps) => {
               })}
             </ul>
           </nav>
-
-          {/* User profile */}
-          <div className="p-3 border-t border-default">
-            <div className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-accent-50 cursor-pointer">
-              <div className="w-8 h-8 bg-accent rounded-full flex items-center justify-center">
-                <span className="text-primary-foreground text-sm font-medium">JD</span>
-              </div>
-              <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-foreground truncate">John Doe</p>
-                <p className="text-xs text-muted-2 truncate">john@example.com</p>
-              </div>
-            </div>
-          </div>
         </div>
       </aside>
     </>

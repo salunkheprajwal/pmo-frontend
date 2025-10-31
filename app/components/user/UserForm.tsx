@@ -166,12 +166,12 @@ export default function UserForm({
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <Input 
+        {/* <Input 
           label="Name" 
           value={values.name || ''} 
           onChange={handleChange('name')} 
           error={errors.name} 
-        />
+        /> */}
         <Input 
           label="First Name" 
           value={values.firstName || ''} 

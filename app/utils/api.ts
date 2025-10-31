@@ -98,6 +98,7 @@ export async function getAdminUsers(token: string): Promise<FetchResult> {
     },
   });
   const data = await res.json().catch(() => ({}));
+  console.log('getAdminUsers response data:', data);
   return { ok: res.ok, data };
 }
 

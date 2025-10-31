@@ -34,8 +34,17 @@ const UserManagementPage = () => {
         const mapped: UserRow[] = list.map(u => ({
           id: String(u.id),
           name: u.name,
+          firstName: u.firstName,
+          lastName: u.lastName,
+          employeeId: u.employeeId,
           email: u.email,
+          mobileNo: u.mobileNo,
           role: u.role || null,
+          organisation: u.organisation || null,
+          department: u.department || null,
+          designation: u.designation || null,
+          teamLeader: u.teamLeader || null,
+          teamManager: u.teamManager || null,
           isVerified: !!u.isVerified,
         }))
         setUsers(mapped)
@@ -77,6 +86,7 @@ const UserManagementPage = () => {
   const openCreate = () => {
     setFormMode('create')
     setSelectedUser(null)
+    setEditInitial(undefined)
     setIsFormOpen(true)
   }
 
@@ -119,21 +129,25 @@ const UserManagementPage = () => {
     setSubmitting(true)
     try {
       if (formMode === 'create') {
-        const { ok } = await createAdminUser(token, {
+        const { ok, data } = await createAdminUser(token, {
           ...values,
-          password: values.password || '', // Ensure password is always provided
+          password: values.password || '',
         })
-        if (ok) {
+        if (ok && data?.status) {
           setIsFormOpen(false)
           await loadUsers()
+        } else {
+          alert(data?.message || 'Failed to create user')
         }
       } else if (selectedUser) {
-        const { ok } = await updateAdminUser(token, selectedUser.id, {
+        const { ok, data } = await updateAdminUser(token, selectedUser.id, {
           ...values,
         })
-        if (ok) {
+        if (ok && data?.status) {
           setIsFormOpen(false)
           await loadUsers()
+        } else {
+          alert(data?.message || 'Failed to update user')
         }
       }
     } finally {
@@ -145,10 +159,12 @@ const UserManagementPage = () => {
     if (!selectedUser) return
     setSubmitting(true)
     try {
-      const { ok } = await deleteAdminUser(token, selectedUser.id)
-      if (ok) {
+      const { ok, data } = await deleteAdminUser(token, selectedUser.id)
+      if (ok && data?.status) {
         setIsDeleteOpen(false)
         await loadUsers()
+      } else {
+        alert(data?.message || 'Failed to delete user')
       }
     } finally {
       setSubmitting(false)
@@ -161,7 +177,7 @@ const UserManagementPage = () => {
 
   return (
     <div className="p-4">
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between mb-4">
         <h1 className="text-xl font-semibold">Users</h1>
         <Button onClick={openCreate}>Add User</Button>
       </div>

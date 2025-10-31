@@ -8,13 +8,14 @@ import { login as apiLogin, verify as apiVerify, resendOtp as apiResendOtp } fro
 
 const LoginForm = () => {
   const router = useRouter()
-  const [email, setEmail] = useState('')
+  const [identifier, setIdentifier] = useState('') // Changed from email to identifier
   const [password, setPassword] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [step, setStep] = useState<'login' | 'otp'>('login')
   const [otp, setOtp] = useState('')
   const [message, setMessage] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
+  const [userEmail, setUserEmail] = useState('') // Store actual email from backend response
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -22,7 +23,8 @@ const LoginForm = () => {
     setError(null)
     setMessage(null)
     try {
-      const { ok, data } = await apiLogin(email, password)
+      // Send identifier as 'email' field (backend handles both email and employeeId)
+      const { ok, data } = await apiLogin(identifier, password)
 
       if (!ok) {
         setError(data?.message || 'Login failed')
@@ -31,6 +33,10 @@ const LoginForm = () => {
       }
 
       if (data?.status) {
+        // Store the actual email from response (in case user logged in with employeeId)
+        if (data.email) {
+          setUserEmail(data.email)
+        }
         setMessage(data.message || 'OTP sent to your email')
         setStep('otp')
       } else {
@@ -49,7 +55,9 @@ const LoginForm = () => {
     setError(null)
     setMessage(null)
     try {
-      const { ok, data } = await apiVerify(email, otp)
+      // Use the actual email from backend response for OTP verification
+      const emailForVerification = userEmail || identifier
+      const { ok, data } = await apiVerify(emailForVerification, otp)
 
       if (!ok) {
         setError(data?.message || 'OTP verification failed')
@@ -78,9 +86,14 @@ const LoginForm = () => {
     setError(null)
     setMessage(null)
     try {
-      const { ok, data } = await apiResendOtp(email, password)
+      // Use the identifier and password for resending OTP
+      const { ok, data } = await apiResendOtp(identifier, password)
       if (ok && data?.status) {
         setMessage('OTP resent to your email')
+        // Update email if returned in response
+        if (data.email) {
+          setUserEmail(data.email)
+        }
       } else {
         setError(data?.message || 'Failed to resend OTP')
       }
@@ -90,7 +103,6 @@ const LoginForm = () => {
       setIsLoading(false)
     }
   }
-
 
   return (
     <div className="bg-surface rounded-2xl shadow-xl p-6">
@@ -110,11 +122,11 @@ const LoginForm = () => {
       {step === 'login' && (
         <form onSubmit={handleSubmit} className="space-y-4">
           <Input
-            label="Email"
-            type="email"
-            placeholder="you@example.com"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            label="Email or Employee ID"
+            type="text"
+            placeholder="you@example.com or EMP123"
+            value={identifier}
+            onChange={(e) => setIdentifier(e.target.value)}
             required
           />
 

@@ -13,7 +13,7 @@ interface OrganizationListProps {
 }
 
 export default function OrganizationList({ organizations, onEdit, onDelete }: OrganizationListProps) {
-  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+  const [viewMode, setViewMode] = useState<'grid' | 'list'>('list');
 
   const columns: Column<Organization>[] = [
     { key: 'name', header: 'Name' },

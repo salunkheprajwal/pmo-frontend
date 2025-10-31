@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import { getProfile, decodeToken } from '@/app/utils/api'
 import { useTheme } from '../ThemeProvider'
 import { Sun, Moon } from 'lucide-react'
@@ -31,19 +32,19 @@ const Header = ({ toggleSidebar }: HeaderProps) => {
   const [profile, setProfile] = useState<UserProfile | null>(null)
   const [loading, setLoading] = useState(true)
   const [showDropdown, setShowDropdown] = useState(false)
+  const [isLoggingOut, setIsLoggingOut] = useState(false)
   const { theme, toggleTheme } = useTheme()
+  const router = useRouter()
 
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        // Try both localStorage and sessionStorage for compatibility
         const token = localStorage.getItem('token') || sessionStorage.getItem('token') || localStorage.getItem('authToken') || sessionStorage.getItem('authToken')
         if (!token) {
           setLoading(false)
           return
         }
 
-        // Try to get profile from API, fallback to decode token if API fails
         let user: any = null
         let ok = false
         try {
@@ -53,7 +54,6 @@ const Header = ({ toggleSidebar }: HeaderProps) => {
         } catch {}
 
         if (!ok) {
-          // fallback: decode token for name/email
           user = decodeToken(token)
         }
 
@@ -76,6 +76,52 @@ const Header = ({ toggleSidebar }: HeaderProps) => {
     }
     fetchProfile()
   }, [])
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as HTMLElement
+      if (showDropdown && !target.closest('.profile-dropdown')) {
+        setShowDropdown(false)
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [showDropdown])
+
+  const handleLogout = async () => {
+    if (isLoggingOut) return
+    
+    setIsLoggingOut(true)
+    
+    try {
+      // Clear all possible token storage locations
+      localStorage.removeItem('token')
+      localStorage.removeItem('authToken')
+      sessionStorage.removeItem('token')
+      sessionStorage.removeItem('authToken')
+      
+      // Clear any other user-related data you might have stored
+      localStorage.removeItem('user')
+      localStorage.removeItem('userProfile')
+      
+      // Close dropdown
+      setShowDropdown(false)
+      
+      // Redirect to login page
+      router.push('/')
+      
+      // Optional: Show success message
+      // You can add a toast notification here if you have one
+    } catch (error) {
+      console.error('Logout error:', error)
+      // Even if there's an error, still redirect to login
+      router.push('/')
+    } finally {
+      setIsLoggingOut(false)
+    }
+  }
 
   const getInitials = (name: string) => {
     return name
@@ -130,7 +176,7 @@ const Header = ({ toggleSidebar }: HeaderProps) => {
           </button>
 
           {/* Profile dropdown */}
-          <div className="relative">
+          <div className="relative profile-dropdown">
             <button 
               onClick={() => setShowDropdown(!showDropdown)}
               className="flex items-center gap-2 p-1.5 hover:bg-accent-50 rounded-lg"
@@ -169,11 +215,21 @@ const Header = ({ toggleSidebar }: HeaderProps) => {
                 )}
 
                 <div className="py-1">
-                  <button className="w-full text-left px-4 py-2 text-sm text-foreground hover:bg-accent-50">
+                  <button 
+                    onClick={() => {
+                      setShowDropdown(false)
+                      router.push('/profile')
+                    }}
+                    className="w-full text-left px-4 py-2 text-sm text-foreground hover:bg-accent-50 transition-colors"
+                  >
                     Profile Settings
                   </button>
-                  <button className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-accent-50">
-                    Logout
+                  <button 
+                    onClick={handleLogout}
+                    disabled={isLoggingOut}
+                    className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    {isLoggingOut ? 'Logging out...' : 'Logout'}
                   </button>
                 </div>
               </div>

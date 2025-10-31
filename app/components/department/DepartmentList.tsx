@@ -17,7 +17,7 @@ export default function DepartmentList({
   onEdit,
   onDelete,
 }: DepartmentListProps) {
-  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+  const [viewMode, setViewMode] = useState<'grid' | 'list'>('list');
 
   const columns: Column<Department>[] = [
     { key: 'name', header: 'Name' },
