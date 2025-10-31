@@ -102,9 +102,13 @@ html, body {
 .text-foreground { color: var(--foreground); }
 .text-muted { color: var(--muted); }
 .text-muted-2 { color: var(--muted-2); }
+.text-danger { color: var(--danger); }
+.text-success { color: var(--success); }
 .border-default { border-color: var(--border); }
 .border-muted { border-color: var(--border-muted); }
 .bg-backdrop { background: var(--backdrop); }
+.bg-danger { background-color: var(--danger); }
+.bg-success { background-color: var(--success); }
 
 /* Edit Button Classes */
 .bg-edit { background-color: var(--edit-bg); }

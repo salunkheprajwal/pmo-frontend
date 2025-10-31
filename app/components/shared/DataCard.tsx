@@ -24,7 +24,7 @@ export default function DataCard<T>({
   return (
     <div
       onClick={() => onClick?.(item)}
-      className={`bg-card text-card-foreground p-6 rounded-lg border border-gray-200 shadow-sm transition-shadow ${
+      className={`bg-card text-card-foreground p-6 rounded-lg border border-default shadow-sm transition-shadow ${
         onClick ? 'hover:shadow-md cursor-pointer' : ''
       }`}
     >

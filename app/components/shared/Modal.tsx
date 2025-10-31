@@ -44,13 +44,13 @@ export default function Modal({ isOpen, onClose, children, title }: ModalProps) 
       className="backdrop:bg-black/50 bg-transparent p-0 rounded-lg shadow-xl max-w-2xl w-full 
                  fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 m-0"
     >
-      <div className="bg-white rounded-lg max-h-[90vh] overflow-y-auto">
+      <div className="bg-surface rounded-lg max-h-[90vh] overflow-y-auto">
         {title && (
-          <div className="flex justify-between items-center px-6 py-4 border-b border-gray-200 sticky top-0 bg-white z-10">
-            <h2 className="text-xl font-semibold text-gray-800">{title}</h2>
+          <div className="flex justify-between items-center px-6 py-4 border-b border-default sticky top-0 bg-surface z-10">
+            <h2 className="text-xl font-semibold text-foreground">{title}</h2>
             <button
               onClick={onClose}
-              className="text-gray-400 hover:text-gray-600 text-2xl leading-none transition-colors"
+              className="text-muted-2 hover:text-foreground text-2xl leading-none transition-colors"
               aria-label="Close"
             >
               &times;

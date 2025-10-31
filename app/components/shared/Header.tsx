@@ -153,7 +153,7 @@ const Header = ({ toggleSidebar }: HeaderProps) => {
               className="w-64 pl-9 pr-3 py-1.5 text-sm border border-muted rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
             />
             <svg 
-              className="absolute left-3 top-2 w-4 h-4 text-gray-400" 
+              className="absolute left-3 top-2 w-4 h-4 text-muted-2" 
               fill="none" 
               stroke="currentColor" 
               viewBox="0 0 24 24"
@@ -227,7 +227,7 @@ const Header = ({ toggleSidebar }: HeaderProps) => {
                   <button 
                     onClick={handleLogout}
                     disabled={isLoggingOut}
-                    className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                   className="w-full text-left px-4 py-2 text-sm text-danger hover:bg-delete transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {isLoggingOut ? 'Logging out...' : 'Logout'}
                   </button>

@@ -52,7 +52,7 @@ export default function DepartmentList({
     <div>
       {/* View toggle */}
       <div className="flex justify-end mb-4">
-        <div className="inline-flex rounded-lg border border-gray-200 p-1">
+        <div className="inline-flex rounded-lg border border-default p-1">
           <button
             onClick={() => setViewMode('grid')}
             className={`p-2 rounded-md ${

@@ -222,7 +222,7 @@ export default function UserForm({
         <div>
           <label className="block text-xs font-medium text-muted mb-1.5">Role</label>
           <select 
-            className="w-full px-3 py-2 text-sm text-foreground border rounded-lg focus:ring-2 transition-all outline-none border-muted focus:ring-accent/20 focus:border-accent" 
+            className="w-full px-3 py-2 text-sm bg-surface text-foreground border border-default rounded-lg focus:ring-2 transition-all outline-none focus:ring-accent/20 focus:border-accent" 
             value={values.role || ''} 
             onChange={handleChange('role')}
           >
@@ -236,7 +236,7 @@ export default function UserForm({
         <div>
           <label className="block text-xs font-medium text-muted mb-1.5">Organization</label>
           <select 
-            className="w-full px-3 py-2 text-sm text-foreground border rounded-lg focus:ring-2 transition-all outline-none border-muted focus:ring-accent/20 focus:border-accent" 
+            className="w-full px-3 py-2 text-sm bg-surface text-foreground border border-default rounded-lg focus:ring-2 transition-all outline-none focus:ring-accent/20 focus:border-accent" 
             value={values.organisationId || ''} 
             onChange={handleOrganisationChange}
           >
@@ -252,7 +252,7 @@ export default function UserForm({
             Department {loadingDepts && <span className="text-xs text-gray-500">(Loading...)</span>}
           </label>
           <select 
-            className="w-full px-3 py-2 text-sm text-foreground border rounded-lg focus:ring-2 transition-all outline-none border-muted focus:ring-accent/20 focus:border-accent" 
+            className="w-full px-3 py-2 text-sm bg-surface text-foreground border border-default rounded-lg focus:ring-2 transition-all outline-none focus:ring-accent/20 focus:border-accent" 
             value={values.departmentId || ''} 
             onChange={handleChange('departmentId')}
             disabled={loadingDepts}
@@ -270,7 +270,7 @@ export default function UserForm({
         <div>
           <label className="block text-xs font-medium text-muted mb-1.5">Designation</label>
           <select 
-            className="w-full px-3 py-2 text-sm text-foreground border rounded-lg focus:ring-2 transition-all outline-none border-muted focus:ring-accent/20 focus:border-accent" 
+            className="w-full px-3 py-2 text-sm bg-surface text-foreground border border-default rounded-lg focus:ring-2 transition-all outline-none focus:ring-accent/20 focus:border-accent" 
             value={values.designationId || ''} 
             onChange={handleChange('designationId')}
           >
@@ -284,7 +284,7 @@ export default function UserForm({
         <div>
           <label className="block text-xs font-medium text-muted mb-1.5">Team Leader</label>
           <select 
-            className="w-full px-3 py-2 text-sm text-foreground border rounded-lg focus:ring-2 transition-all outline-none border-muted focus:ring-accent/20 focus:border-accent" 
+            className="w-full px-3 py-2 text-sm bg-surface text-foreground border border-default rounded-lg focus:ring-2 transition-all outline-none focus:ring-accent/20 focus:border-accent" 
             value={values.reportingTeamLeaderId || ''} 
             onChange={handleChange('reportingTeamLeaderId')}
           >
@@ -298,7 +298,7 @@ export default function UserForm({
         <div>
           <label className="block text-xs font-medium text-muted mb-1.5">Team Manager</label>
           <select 
-            className="w-full px-3 py-2 text-sm text-foreground border rounded-lg focus:ring-2 transition-all outline-none border-muted focus:ring-accent/20 focus:border-accent" 
+            className="w-full px-3 py-2 text-sm bg-surface text-foreground border border-default rounded-lg focus:ring-2 transition-all outline-none focus:ring-accent/20 focus:border-accent" 
             value={values.reportingTeamManagerId || ''} 
             onChange={handleChange('reportingTeamManagerId')}
           >

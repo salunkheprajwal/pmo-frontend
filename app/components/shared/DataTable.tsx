@@ -29,7 +29,7 @@ export default function DataTable<T>({
     <div className="w-full overflow-x-auto">
       <table className="w-full text-sm">
         <thead>
-          <tr className="border-b border-gray-200">
+          <tr className="border-b border-default">
             {columns.map((column) => (
               <th
                 key={column.key.toString()}
@@ -50,7 +50,7 @@ export default function DataTable<T>({
           {data.map((item, index) => (
             <tr
               key={index}
-              className="border-b border-gray-200 hover:bg-muted/50 transition-colors"
+              className="border-b border-default hover:bg-muted/50 transition-colors"
             >
               {columns.map((column) => (
                 <td key={column.key.toString()} className="py-3 px-4">

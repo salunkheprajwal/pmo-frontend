@@ -63,7 +63,7 @@ export default function DepartmentForm({
           name="organisationId"
           value={formData.organisationId}
           onChange={(e) => setFormData({ ...formData, organisationId: e.target.value })}
-          className="w-full px-3 py-2 border border-input rounded-md bg-background text-foreground"
+          className="w-full px-3 py-2 text-sm bg-surface text-foreground border border-default rounded-md focus:ring-2 focus:ring-accent/20 focus:border-accent"
           required
         >
           <option value="">Select Organization</option>

@@ -116,8 +116,8 @@ const LoginForm = () => {
         <p className="text-sm text-muted-2 mt-1">Sign in to continue</p>
       </div>
 
-      {error && <div className="text-sm text-red-600 mb-2">{error}</div>}
-      {message && <div className="text-sm text-green-600 mb-2">{message}</div>}
+      {error && <div className="text-sm text-danger mb-2">{error}</div>}
+      {message && <div className="text-sm text-success mb-2">{message}</div>}
 
       {step === 'login' && (
         <form onSubmit={handleSubmit} className="space-y-4">

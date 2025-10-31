@@ -114,9 +114,9 @@ export default function OrganizationForm({ initialData, onSubmit, onCancel, isLo
             id="isActive"
             checked={formData.isActive}
             onChange={(e) => setFormData({ ...formData, isActive: e.target.checked })}
-            className="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+            className="h-4 w-4 text-accent border-default rounded focus:ring-2 focus:ring-accent"
           />
-          <label htmlFor="isActive" className="text-gray-700">Active Status</label>
+          <label htmlFor="isActive" className="text-foreground">Active Status</label>
         </div>
       </div>
     
@@ -124,14 +124,14 @@ export default function OrganizationForm({ initialData, onSubmit, onCancel, isLo
         <Button
           type="button"
           onClick={onCancel}
-          className="bg-gray-100 text-gray-700 hover:bg-gray-200"
+          className="bg-surface border border-default text-foreground"
         >
           Cancel
         </Button>
         <Button
           type="submit"
           disabled={isLoading}
-          className="bg-blue-600 text-white hover:bg-blue-700"
+          className="bg-primary text-primary-foreground"
         >
           {isLoading ? 'Saving...' : initialData ? 'Update Organization' : 'Create Organization'}
         </Button>
