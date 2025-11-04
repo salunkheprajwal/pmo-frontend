@@ -6,8 +6,8 @@ import OrganizationList from '@/app/components/organization/OrganizationList';
 import ConfirmDialog from '@/app/components/shared/ConfirmDialog';
 import Modal from '@/app/components/shared/Modal';
 import Button from '@/app/components/shared/Button';
-import * as api from '@/app/utils/api';
-import { Organization } from '@/app/utils/api';
+import * as orgApi from '@/app/utils/api/organization';
+import { Organization } from '@/app/utils/api/organization';
 import { Plus } from 'lucide-react';
 
 export default function OrganizationPage() {
@@ -28,7 +28,7 @@ export default function OrganizationPage() {
   const fetchOrganizations = async () => {
     setError(null);
     try {
-      const { ok, data } = await api.getOrganizations(getToken());
+      const { ok, data } = await orgApi.getOrganizations(getToken());
       if (!ok) throw new Error(data.message || 'Failed to fetch organizations');
       setOrganizations(data.data);
     } catch (error) {
@@ -42,25 +42,25 @@ export default function OrganizationPage() {
     setError(null);
     try {
       if (selectedOrg) {
-        const { ok, data } = await api.updateOrganization(
+        const { ok, data } = await orgApi.updateOrganization(
           getToken(),
           selectedOrg.id,
           formData
         );
-        
+
         if (!ok) throw new Error(data.message || 'Failed to update organization');
-        
+
         setOrganizations(orgs => 
           orgs.map(org => org.id === selectedOrg.id ? data.data : org)
         );
       } else {
-        const { ok, data } = await api.createOrganization(
+        const { ok, data } = await orgApi.createOrganization(
           getToken(),
-          formData as api.CreateOrganizationData
+          formData as orgApi.CreateOrganizationData
         );
-        
+
         if (!ok) throw new Error(data.message || 'Failed to create organization');
-        
+
         setOrganizations(orgs => [...orgs, data.data]);
       }
       
@@ -77,7 +77,7 @@ export default function OrganizationPage() {
   const handleDelete = async (id: string) => {
     setError(null);
     try {
-      const { ok, data } = await api.deleteOrganization(getToken(), id);
+  const { ok, data } = await orgApi.deleteOrganization(getToken(), id);
       if (!ok) throw new Error(data.message || 'Failed to delete organization');
       
       setOrganizations(orgs => orgs.filter(org => org.id !== id));

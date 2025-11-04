@@ -1,7 +1,8 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Department, Organization, createDepartment, updateDepartment } from '@/app/utils/api';
+import { Department, createDepartment, updateDepartment } from '@/app/utils/api/department';
+import { Organization } from '@/app/utils/api/organization';
 import Input from '../shared/Input';
 import Button from '../shared/Button';
 

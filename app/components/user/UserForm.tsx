@@ -3,7 +3,10 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import Input from '../shared/Input';
 import Button from '../shared/Button';
-import { Department, Designation, Organization, Role, getDepartments } from '@/app/utils/api';
+import { Department, getDepartments } from '@/app/utils/api/department';
+import { Designation } from '@/app/utils/api/designation';
+import { Organization } from '@/app/utils/api/organization';
+import { Role } from '@/app/utils/api/role';
 
 export type UserFormValues = {
   name?: string;

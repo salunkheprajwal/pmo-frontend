@@ -3,11 +3,10 @@
 import { useEffect, useState } from 'react';
 import {
   Department,
-  Organization,
   getDepartments,
-  getOrganizations,
   deleteDepartment,
-} from '@/app/utils/api';
+} from '@/app/utils/api/department';
+import { Organization, getOrganizations } from '@/app/utils/api/organization';
 import DepartmentList from '@/app/components/department/DepartmentList';
 import DepartmentForm from '@/app/components/department/DepartmentForm';
 import Modal from '@/app/components/shared/Modal';

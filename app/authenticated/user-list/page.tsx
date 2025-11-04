@@ -6,7 +6,11 @@ import Modal from '@/app/components/shared/Modal'
 import ConfirmDialog from '@/app/components/shared/ConfirmDialog'
 import UserForm, { UserFormValues } from '@/app/components/user/UserForm'
 import UserList, { UserRow } from '@/app/components/user/UserList'
-import { createAdminUser, deleteAdminUser, getAdminUsers, updateAdminUser, AdminUserSummary, getRoles, getOrganizations, getDepartments, getDesignations, Role, Organization, Department, Designation, getAdminUser } from '@/app/utils/api'
+import { createAdminUser, deleteAdminUser, getAdminUsers, updateAdminUser, AdminUserSummary, getAdminUser } from '@/app/utils/api/adminUsers'
+import { getRoles, Role } from '@/app/utils/api/role'
+import { getOrganizations, Organization } from '@/app/utils/api/organization'
+import { getDepartments, Department } from '@/app/utils/api/department'
+import { getDesignations, Designation } from '@/app/utils/api/designation'
 
 const UserManagementPage = () => {
   const [users, setUsers] = useState<UserRow[]>([])

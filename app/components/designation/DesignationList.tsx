@@ -4,7 +4,7 @@ import Button from '../shared/Button';
 import DataTable, { Column } from '../shared/DataTable';
 import ConfirmDialog from '../shared/ConfirmDialog';
 import DesignationForm from './DesignationForm';
-import { getDesignations, createDesignation, updateDesignation, deleteDesignation, Designation } from '@/app/utils/api';
+import { getDesignations, createDesignation, updateDesignation, deleteDesignation, Designation } from '@/app/utils/api/designation';
 
 export default function DesignationList() {
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);

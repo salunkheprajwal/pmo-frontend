@@ -2,7 +2,8 @@
 
 import React, { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { getProfile, decodeToken } from '@/app/utils/api'
+import { getProfile } from '@/app/utils/api/profile'
+import { decodeToken } from '@/app/utils/api/shared'
 import { useTheme } from '../ThemeProvider'
 import { Sun, Moon } from 'lucide-react'
 

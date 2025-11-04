@@ -4,7 +4,7 @@ import Button from '../shared/Button';
 import DataTable, { Column } from '../shared/DataTable';
 import ConfirmDialog from '../shared/ConfirmDialog';
 import RoleForm from './RoleForm';
-import { getRoles, createRole, updateRole, deleteRole, Role } from '@/app/utils/api';
+import { getRoles, createRole, updateRole, deleteRole, Role } from '@/app/utils/api/role';
 
 export default function RoleList() {
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);

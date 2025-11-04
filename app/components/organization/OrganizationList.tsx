@@ -4,7 +4,7 @@ import { useState } from 'react';
 import DataTable, { Column } from '../shared/DataTable';
 import DataCard from '../shared/DataCard';
 import { Grid, List } from 'lucide-react';
-import { Organization } from '@/app/utils/api';
+import { Organization } from '@/app/utils/api/organization';
 
 interface OrganizationListProps {
   organizations: Organization[];

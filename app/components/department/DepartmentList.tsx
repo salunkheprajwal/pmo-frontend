@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Department } from '@/app/utils/api';
+import { Department } from '@/app/utils/api/department';
 import DataTable, { Column } from '../shared/DataTable';
 import DataCard from '../shared/DataCard';
 import { Grid, List } from 'lucide-react';
