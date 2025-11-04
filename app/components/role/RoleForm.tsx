@@ -1,15 +1,9 @@
 'use client';
 import { useState } from 'react';
+import { RoleFormProps } from '@/app/utils/api/role';
 import Button from '../shared/Button';
 import Input from '../shared/Input';
 import Modal from '../shared/Modal';
-
-interface RoleFormProps {
-  isOpen: boolean;
-  onClose: () => void;
-  onSubmit: (data: { name: string; description: string }) => void;
-  initialData?: { name: string; description: string };
-}
 
 export default function RoleForm({ isOpen, onClose, onSubmit, initialData }: RoleFormProps) {
   const [formData, setFormData] = useState({

@@ -3,13 +3,8 @@ import { useState } from 'react';
 import Button from '../shared/Button';
 import Input from '../shared/Input';
 import Modal from '../shared/Modal';
+import { DesignationFormProps } from '@/app/utils/api/designation';
 
-interface DesignationFormProps {
-  isOpen: boolean;
-  onClose: () => void;
-  onSubmit: (data: { name: string; description: string }) => void;
-  initialData?: { name: string; description: string };
-}
 
 export default function DesignationForm({ isOpen, onClose, onSubmit, initialData }: DesignationFormProps) {
   const [formData, setFormData] = useState({

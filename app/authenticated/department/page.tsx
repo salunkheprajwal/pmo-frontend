@@ -113,7 +113,6 @@ export default function DepartmentPage() {
           }}
           className="bg-primary text-primary-foreground hover:bg-primary/90"
         >
-          <Plus size={18} className="mr-2" />
           Add Department
         </Button>
       </div>

@@ -18,6 +18,13 @@ export type UpdateRoleData = Partial<{
   description: string;
 }>;
 
+export interface RoleFormProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onSubmit: (data: { name: string; description: string }) => void;
+  initialData?: { name: string; description: string };
+}
+
 // Role API Functions
 export async function getRoles(token: string): Promise<FetchResult> {
   const apiBase = getBase();

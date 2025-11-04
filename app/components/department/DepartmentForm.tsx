@@ -1,18 +1,14 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Department, createDepartment, updateDepartment } from '@/app/utils/api/department';
-import { Organization } from '@/app/utils/api/organization';
 import Input from '../shared/Input';
 import Button from '../shared/Button';
-
-interface DepartmentFormProps {
-  initialData?: Department;
-  organizations: Organization[];
-  token: string;
-  onSuccess: () => void;
-  onCancel: () => void;
-}
+import {
+  Department,
+  DepartmentFormProps,
+  createDepartment,
+  updateDepartment,
+} from "@/app/utils/api/department";
 
 export default function DepartmentForm({
   initialData,

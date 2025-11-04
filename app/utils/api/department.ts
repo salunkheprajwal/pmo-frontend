@@ -28,6 +28,21 @@ export type UpdateDepartmentData = Partial<{
   isActive: boolean;
 }>;
 
+
+export interface DepartmentFormProps {
+  initialData?: Department;
+  organizations: { id: string; name: string }[];
+  token: string;
+  onSuccess: () => void;
+  onCancel: () => void;
+}
+
+export interface DepartmentListProps {
+  departments: Department[];
+  onEdit: (department: Department) => void;
+  onDelete: (department: Department) => void;
+}
+
 // Department API Functions
 export async function getDepartments(
   token: string,

@@ -8,7 +8,6 @@ import Modal from '@/app/components/shared/Modal';
 import Button from '@/app/components/shared/Button';
 import * as orgApi from '@/app/utils/api/organization';
 import { Organization } from '@/app/utils/api/organization';
-import { Plus } from 'lucide-react';
 
 export default function OrganizationPage() {
   const [organizations, setOrganizations] = useState<Organization[]>([]);
@@ -116,7 +115,6 @@ export default function OrganizationPage() {
           }}
           className="bg-primary text-primary-foreground hover:bg-primary/90"
         >
-          <Plus size={18} className="mr-2" />
           Add Organization
         </Button>
       </div>

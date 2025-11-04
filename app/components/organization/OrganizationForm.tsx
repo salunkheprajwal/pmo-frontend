@@ -3,20 +3,7 @@
 import { useState, useEffect } from 'react';
 import Button from '../shared/Button';
 import Input from '../shared/Input';
-
-interface OrganizationFormProps {
-  initialData?: {
-    id?: string;
-    name: string;
-    address: string;
-    phone: string;
-    email: string;
-    isActive?: boolean;
-  };
-  onSubmit: (data: any) => Promise<void>;
-  onCancel: () => void;
-  isLoading: boolean;
-}
+import { OrganizationFormProps } from '@/app/utils/api/organization';
 
 export default function OrganizationForm({ initialData, onSubmit, onCancel, isLoading }: OrganizationFormProps) {
   const [formData, setFormData] = useState({

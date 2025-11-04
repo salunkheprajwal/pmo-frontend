@@ -13,6 +13,12 @@ export interface Organization {
 
 export type CreateOrganizationData = Omit<Organization, 'id' | 'createdAt' | 'updatedAt'>;
 export type UpdateOrganizationData = Partial<CreateOrganizationData>;
+export interface OrganizationFormProps {
+  initialData?: Partial<Organization>;
+  onSubmit: (data: CreateOrganizationData | UpdateOrganizationData) => Promise<void>;
+  onCancel: () => void;
+  isLoading: boolean;
+}
 
 // Organization API Functions
 export async function getOrganizations(token: string): Promise<FetchResult> {

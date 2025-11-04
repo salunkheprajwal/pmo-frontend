@@ -19,6 +19,12 @@ export type UpdateDesignationData = Partial<{
   description: string;
   isActive: boolean;
 }>;
+export interface DesignationFormProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onSubmit: (data: { name: string; description: string }) => void;
+  initialData?: { name: string; description: string };
+}
 
 // Designation API Functions
 export async function getDesignations(token: string): Promise<FetchResult> {
