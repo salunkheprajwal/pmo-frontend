@@ -1,42 +1,47 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Department, DepartmentListProps } from '@/app/utils/api/department';
+import { Organization, OrganizationListProps } from '@/app/utils/api/organization';
 import DataTable, { Column } from '../shared/DataTable';
 import DataCard from '../shared/DataCard';
 import { Grid, List } from 'lucide-react';
 
-export default function DepartmentList({
-  departments,
+export default function OrganizationList({
+  organizations,
   onEdit,
   onDelete,
-}: DepartmentListProps) {
+}: OrganizationListProps) {
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('list');
 
-  const columns: Column<Department>[] = [
+  const columns: Column<Organization>[] = [
     { key: 'name', header: 'Name' },
     { 
-      key: 'organisation',
-      header: 'Organization',
-      render: (dept) => dept.organisation?.name || '-'
+      key: 'address',
+      header: 'Address',
+      render: (org) => org.address || '-'
     },
     { 
-      key: 'description',
-      header: 'Description',
-      render: (dept) => dept.description || '-'
+      key: 'phone',
+      header: 'Phone',
+      render: (org) => org.phone || '-'
+    },
+    { 
+      key: 'email',
+      header: 'Email',
+      render: (org) => org.email || '-'
     },
     {
       key: 'status',
       header: 'Status',
-      render: (dept) => (
+      render: (org) => (
         <span
           className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
-            dept.isActive
+            org.isActive
               ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
               : 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200'
           }`}
         >
-          {dept.isActive ? 'Active' : 'Inactive'}
+          {org.isActive ? 'Active' : 'Inactive'}
         </span>
       )
     }
@@ -75,39 +80,45 @@ export default function DepartmentList({
       {/* Content */}
       {viewMode === 'grid' ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
-          {departments.map((department) => (
+          {organizations.map((organization) => (
             <DataCard
-              key={department.id}
-              item={department}
-              title={(dept) => dept.name}
-              subtitle={(dept) => dept.description}
-              meta={(dept) => (
-                <div className="text-sm">
-                  <span className="text-muted-foreground">Organization: </span>
-                  <span className="font-medium">{dept.organisation?.name || '-'}</span>
+              key={organization.id}
+              item={organization}
+              title={(org) => org.name}
+              subtitle={(org) => org.address}
+              meta={(org) => (
+                <div className="text-sm space-y-1">
+                  <div>
+                    <span className="text-muted-foreground">Phone: </span>
+                    <span className="font-medium">{org.phone || '-'}</span>
+                  </div>
+                  <div>
+                    <span className="text-muted-foreground">Email: </span>
+                    <span className="font-medium">{org.email || '-'}</span>
+                  </div>
                 </div>
               )}
-              statusIndicator={(dept) => ({
-                color: dept.isActive ? 'bg-green-500' : 'bg-red-500',
-                label: dept.isActive ? 'Active' : 'Inactive'
+              statusIndicator={(org) => ({
+                color: org.isActive ? 'bg-green-500' : 'bg-red-500',
+                label: org.isActive ? 'Active' : 'Inactive'
               })}
-              footer={(dept) => (
+              footer={(org) => (
                 <div className="text-xs text-muted-foreground">
-                  {dept.createdAt && (
-                    `Created: ${new Date(dept.createdAt).toLocaleDateString()}`
+                  {org.createdAt && (
+                    `Created: ${new Date(org.createdAt).toLocaleDateString()}`
                   )}
                 </div>
               )}
-              onClick={() => onEdit(department)}
+              onClick={() => onEdit(organization.id)}
             />
           ))}
         </div>
       ) : (
         <DataTable
-          data={departments}
+          data={organizations}
           columns={columns}
-          onEdit={onEdit}
-          onDelete={onDelete}
+          onEdit={(org) => onEdit(org.id)}
+          onDelete={(org) => onDelete(org.id)}
         />
       )}
     </div>

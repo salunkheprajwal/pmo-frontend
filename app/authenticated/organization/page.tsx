@@ -29,10 +29,11 @@ export default function OrganizationPage() {
     try {
       const { ok, data } = await orgApi.getOrganizations(getToken());
       if (!ok) throw new Error(data.message || 'Failed to fetch organizations');
-      setOrganizations(data.data);
+      setOrganizations(Array.isArray(data.data) ? data.data : []);
     } catch (error) {
       console.error('Fetch failed:', error);
       setError(error instanceof Error ? error.message : 'Failed to fetch organizations');
+      setOrganizations([]); // Ensure organizations is always an array
     }
   };
 

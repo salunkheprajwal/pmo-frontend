@@ -19,7 +19,7 @@ interface DataTableProps<T> {
 }
 
 export default function DataTable<T>({
-  data,
+  data = [],
   columns,
   onEdit,
   onDelete,

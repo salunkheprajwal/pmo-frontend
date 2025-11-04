@@ -20,6 +20,12 @@ export interface OrganizationFormProps {
   isLoading: boolean;
 }
 
+export interface OrganizationListProps {
+  organizations: Organization[];
+  onEdit: (id: string) => void;
+  onDelete: (id: string) => void;
+}
+
 // Organization API Functions
 export async function getOrganizations(token: string): Promise<FetchResult> {
   const apiBase = getBase();
