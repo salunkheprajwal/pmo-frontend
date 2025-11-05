@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { getProfile } from '@/app/utils/api/profile'
+import { useApi } from '../../context/ApiContext'
 import { decodeToken } from '@/app/utils/api/shared'
 import { useTheme } from '../ThemeProvider'
 import { Sun, Moon } from 'lucide-react'
@@ -37,6 +37,7 @@ const Header = ({ toggleSidebar }: HeaderProps) => {
   const { theme, toggleTheme } = useTheme()
   const router = useRouter()
 
+  const api = useApi()
   useEffect(() => {
     const fetchProfile = async () => {
       try {
@@ -49,7 +50,7 @@ const Header = ({ toggleSidebar }: HeaderProps) => {
         let user: any = null
         let ok = false
         try {
-          const resp = await getProfile(token)
+          const resp = await api.getProfile(token)
           ok = resp.ok && resp.data.status
           if (ok) user = resp.data.data
         } catch {}
@@ -76,7 +77,7 @@ const Header = ({ toggleSidebar }: HeaderProps) => {
       }
     }
     fetchProfile()
-  }, [])
+  }, [api])
 
   // Close dropdown when clicking outside
   useEffect(() => {

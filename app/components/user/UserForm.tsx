@@ -3,10 +3,11 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import Input from '../shared/Input';
 import Button from '../shared/Button';
-import { Department, getDepartments } from '@/app/utils/api/department';
+import { Department } from '@/app/utils/api/department';
 import { Designation } from '@/app/utils/api/designation';
 import { Organization } from '@/app/utils/api/organization';
 import { Role } from '@/app/utils/api/role';
+import { useApi } from '@/app/context/ApiContext';
 
 export type UserFormValues = {
   name?: string;
@@ -104,10 +105,11 @@ export default function UserForm({
 
   const isEdit = useMemo(() => mode === 'edit', [mode]);
 
+  const api = useApi();
   const fetchDepartmentsByOrg = async (orgId: string) => {
     setLoadingDepts(true);
     try {
-      const { ok, data } = await getDepartments(token, orgId);
+      const { ok, data } = await api.getDepartments(token, orgId);
       
       if (ok && data?.status) {
         const depts = data.departments || data.data || [];

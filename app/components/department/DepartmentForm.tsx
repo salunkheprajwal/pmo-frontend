@@ -3,12 +3,8 @@
 import React, { useState } from 'react';
 import Input from '../shared/Input';
 import Button from '../shared/Button';
-import {
-  Department,
-  DepartmentFormProps,
-  createDepartment,
-  updateDepartment,
-} from "@/app/utils/api/department";
+import { Department, DepartmentFormProps } from "@/app/utils/api/department";
+import { useApi } from '@/app/context/ApiContext';
 
 interface DepartmentEntry {
   name: string;
@@ -85,6 +81,8 @@ export default function DepartmentForm({
     return isValid;
   };
 
+  const api = useApi();
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
     
@@ -94,12 +92,12 @@ export default function DepartmentForm({
     
     try {
       if (initialData) {
-        await updateDepartment(token, initialData.id, departments[0]);
+        await api.updateDepartment(token, initialData.id, departments[0]);
       } else {
         const validDepartments = departments.filter(dept => dept.name.trim() !== '');
         
         for (const dept of validDepartments) {
-          await createDepartment(token, dept);
+          await api.createDepartment(token, dept);
         }
       }
       

@@ -4,10 +4,11 @@ import React, { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Input from '../shared/Input'
 import Button from '../shared/Button'
-import { login as apiLogin, verify as apiVerify, resendOtp as apiResendOtp } from '@/app/utils/api/auth'
+import { useApi } from '@/app/context/ApiContext'
 
 const LoginForm = () => {
   const router = useRouter()
+  const api = useApi()
   const [identifier, setIdentifier] = useState('') // Changed from email to identifier
   const [password, setPassword] = useState('')
   const [isLoading, setIsLoading] = useState(false)
@@ -24,7 +25,7 @@ const LoginForm = () => {
     setMessage(null)
     try {
       // Send identifier as 'email' field (backend handles both email and employeeId)
-      const { ok, data } = await apiLogin(identifier, password)
+      const { ok, data } = await api.login(identifier, password)
 
       if (!ok) {
         setError(data?.message || 'Login failed')
@@ -57,7 +58,7 @@ const LoginForm = () => {
     try {
       // Use the actual email from backend response for OTP verification
       const emailForVerification = userEmail || identifier
-      const { ok, data } = await apiVerify(emailForVerification, otp)
+      const { ok, data } = await api.verify(emailForVerification, otp)
 
       if (!ok) {
         setError(data?.message || 'OTP verification failed')
@@ -87,7 +88,7 @@ const LoginForm = () => {
     setMessage(null)
     try {
       // Use the identifier and password for resending OTP
-      const { ok, data } = await apiResendOtp(identifier, password)
+      const { ok, data } = await api.resendOtp(identifier, password)
       if (ok && data?.status) {
         setMessage('OTP resent to your email')
         // Update email if returned in response

@@ -6,7 +6,7 @@ import OrganizationList from '@/app/components/organization/OrganizationList';
 import ConfirmDialog from '@/app/components/shared/ConfirmDialog';
 import Modal from '@/app/components/shared/Modal';
 import Button from '@/app/components/shared/Button';
-import * as orgApi from '@/app/utils/api/organization';
+import { useApi } from '@/app/context/ApiContext';
 import { Organization } from '@/app/utils/api/organization';
 
 export default function OrganizationPage() {
@@ -16,8 +16,10 @@ export default function OrganizationPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [deleteId, setDeleteId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const api = useApi();
   useEffect(() => {
     fetchOrganizations();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const getToken = () => {
@@ -27,7 +29,7 @@ export default function OrganizationPage() {
   const fetchOrganizations = async () => {
     setError(null);
     try {
-      const { ok, data } = await orgApi.getOrganizations(getToken());
+      const { ok, data } = await api.getOrganizations(getToken());
       if (!ok) throw new Error(data.message || 'Failed to fetch organizations');
       setOrganizations(Array.isArray(data.data) ? data.data : []);
     } catch (error) {
@@ -42,7 +44,7 @@ export default function OrganizationPage() {
     setError(null);
     try {
       if (selectedOrg) {
-        const { ok, data } = await orgApi.updateOrganization(
+        const { ok, data } = await api.updateOrganization(
           getToken(),
           selectedOrg.id,
           formData
@@ -54,9 +56,9 @@ export default function OrganizationPage() {
           orgs.map(org => org.id === selectedOrg.id ? data.data : org)
         );
       } else {
-        const { ok, data } = await orgApi.createOrganization(
+        const { ok, data } = await api.createOrganization(
           getToken(),
-          formData as orgApi.CreateOrganizationData
+          formData as any // If needed, adjust type
         );
 
         if (!ok) throw new Error(data.message || 'Failed to create organization');
@@ -77,7 +79,7 @@ export default function OrganizationPage() {
   const handleDelete = async (id: string) => {
     setError(null);
     try {
-  const { ok, data } = await orgApi.deleteOrganization(getToken(), id);
+      const { ok, data } = await api.deleteOrganization(getToken(), id);
       if (!ok) throw new Error(data.message || 'Failed to delete organization');
       
       setOrganizations(orgs => orgs.filter(org => org.id !== id));

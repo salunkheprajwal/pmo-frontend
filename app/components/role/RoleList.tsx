@@ -4,9 +4,11 @@ import Button from '../shared/Button';
 import DataTable, { Column } from '../shared/DataTable';
 import ConfirmDialog from '../shared/ConfirmDialog';
 import RoleForm from './RoleForm';
-import { getRoles, createRole, updateRole, deleteRole, Role } from '@/app/utils/api/role';
+import { Role } from '@/app/utils/api/role';
+import { useApi } from '@/app/context/ApiContext';
 
 export default function RoleList() {
+  const api = useApi();
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
@@ -18,7 +20,7 @@ export default function RoleList() {
     try {
       setIsLoading(true);
       const token = localStorage.getItem('token') || '';
-      const response = await getRoles(token);
+      const response = await api.getRoles(token);
       if (response.ok && response.data.data) {
         setRoles(response.data.data);
    
@@ -37,7 +39,7 @@ export default function RoleList() {
   const handleAdd = async (data: { name: string; description: string }) => {
     try {
       const token = localStorage.getItem('token') || '';
-      const response = await createRole(token, data);
+      const response = await api.createRole(token, data);
       if (response.ok) {
         await fetchRoles();
         setIsAddModalOpen(false);
@@ -51,7 +53,7 @@ export default function RoleList() {
     try {
       if (!selectedRole) return;
       const token = localStorage.getItem('token') || '';
-      const response = await updateRole(token, selectedRole.id, data);
+      const response = await api.updateRole(token, selectedRole.id, data);
       if (response.ok) {
         await fetchRoles();
         setIsEditModalOpen(false);
@@ -66,7 +68,7 @@ export default function RoleList() {
     try {
       if (!selectedRole) return;
       const token = localStorage.getItem('token') || '';
-      const response = await deleteRole(token, selectedRole.id);
+      const response = await api.deleteRole(token, selectedRole.id);
       if (response.ok) {
         await fetchRoles();
         setIsDeleteDialogOpen(false);

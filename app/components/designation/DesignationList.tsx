@@ -4,9 +4,11 @@ import Button from '../shared/Button';
 import DataTable, { Column } from '../shared/DataTable';
 import ConfirmDialog from '../shared/ConfirmDialog';
 import DesignationForm from './DesignationForm';
-import { getDesignations, createDesignation, updateDesignation, deleteDesignation, Designation } from '@/app/utils/api/designation';
+import { Designation } from '@/app/utils/api/designation';
+import { useApi } from '@/app/context/ApiContext';
 
 export default function DesignationList() {
+  const api = useApi();
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
@@ -18,7 +20,7 @@ export default function DesignationList() {
     try {
       setIsLoading(true);
       const token = localStorage.getItem('token') || '';
-      const response = await getDesignations(token);
+      const response = await api.getDesignations(token);
       if (response.ok && response.data.data) {
         setDesignations(response.data.data);
       }
@@ -36,7 +38,7 @@ export default function DesignationList() {
   const handleAdd = async (data: { name: string; description: string }) => {
     try {
       const token = localStorage.getItem('token') || '';
-      const response = await createDesignation(token, data);
+      const response = await api.createDesignation(token, data);
       if (response.ok) {
         await fetchDesignations();
         setIsAddModalOpen(false);
@@ -50,7 +52,7 @@ export default function DesignationList() {
     try {
       if (!selectedDesignation) return;
       const token = localStorage.getItem('token') || '';
-      const response = await updateDesignation(token, selectedDesignation.id, data);
+      const response = await api.updateDesignation(token, selectedDesignation.id, data);
       if (response.ok) {
         await fetchDesignations();
         setIsEditModalOpen(false);
@@ -65,7 +67,7 @@ export default function DesignationList() {
     try {
       if (!selectedDesignation) return;
       const token = localStorage.getItem('token') || '';
-      const response = await deleteDesignation(token, selectedDesignation.id);
+      const response = await api.deleteDesignation(token, selectedDesignation.id);
       if (response.ok) {
         await fetchDesignations();
         setIsDeleteDialogOpen(false);

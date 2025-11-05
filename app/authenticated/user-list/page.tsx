@@ -6,13 +6,15 @@ import Modal from '@/app/components/shared/Modal'
 import ConfirmDialog from '@/app/components/shared/ConfirmDialog'
 import UserForm, { UserFormValues } from '@/app/components/user/UserForm'
 import UserList, { UserRow } from '@/app/components/user/UserList'
-import { createAdminUser, deleteAdminUser, getAdminUsers, updateAdminUser, AdminUserSummary, getAdminUser } from '@/app/utils/api/adminUsers'
-import { getRoles, Role } from '@/app/utils/api/role'
-import { getOrganizations, Organization } from '@/app/utils/api/organization'
-import { getDepartments, Department } from '@/app/utils/api/department'
-import { getDesignations, Designation } from '@/app/utils/api/designation'
+import { AdminUserSummary } from '@/app/utils/api/adminUsers'
+import { Role } from '@/app/utils/api/role'
+import { Organization } from '@/app/utils/api/organization'
+import { Department } from '@/app/utils/api/department'
+import { Designation } from '@/app/utils/api/designation'
+import { useApi } from '@/app/context/ApiContext'
 
 const UserManagementPage = () => {
+  const api = useApi()
   const [users, setUsers] = useState<UserRow[]>([])
   const [loading, setLoading] = useState<boolean>(false)
   const [isFormOpen, setIsFormOpen] = useState<boolean>(false)
@@ -32,7 +34,7 @@ const UserManagementPage = () => {
   const loadUsers = useCallback(async () => {
     setLoading(true)
     try {
-      const { ok, data } = await getAdminUsers(token)
+      const { ok, data } = await api.getAdminUsers(token)
       if (ok && data?.status) {
         const list: AdminUserSummary[] = data.users || []
         const mapped: UserRow[] = list.map(u => ({
@@ -55,10 +57,13 @@ const UserManagementPage = () => {
       } else {
         setUsers([])
       }
+    } catch (error) {
+      console.error('Error loading users:', error)
+      setUsers([])
     } finally {
       setLoading(false)
     }
-  }, [token])
+  }, [api, token])
 
   useEffect(() => {
     loadUsers()
@@ -67,25 +72,29 @@ const UserManagementPage = () => {
   useEffect(() => {
     const loadDropdowns = async () => {
       if (!token) return
-      const [rolesRes, orgRes, deptRes, desigRes, usersRes] = await Promise.all([
-        getRoles(token),
-        getOrganizations(token),
-        getDepartments(token),
-        getDesignations(token),
-        getAdminUsers(token),
-      ])
+      try {
+        const [rolesRes, orgRes, deptRes, desigRes, usersRes] = await Promise.all([
+          api.getRoles(token),
+          api.getOrganizations(token),
+          api.getDepartments(token),
+          api.getDesignations(token),
+          api.getAdminUsers(token),
+        ])
 
-      if (rolesRes.ok && rolesRes.data?.status) setRoles(rolesRes.data.roles || rolesRes.data.data || [])
-      if (orgRes.ok && orgRes.data?.status) setOrganizations(orgRes.data.organisations || orgRes.data.organizations || orgRes.data.data || [])
-      if (deptRes.ok && deptRes.data?.status) setDepartments(deptRes.data.departments || deptRes.data.data || [])
-      if (desigRes.ok && desigRes.data?.status) setDesignations(desigRes.data.designations || desigRes.data.data || [])
-      if (usersRes.ok && usersRes.data?.status) {
-        const tm = (usersRes.data.users || []).map((u: AdminUserSummary) => ({ id: String(u.id), name: u.name, email: u.email }))
-        setTeamMembers(tm)
+        if (rolesRes.ok && rolesRes.data?.status) setRoles(rolesRes.data.roles || rolesRes.data.data || [])
+        if (orgRes.ok && orgRes.data?.status) setOrganizations(orgRes.data.organisations || orgRes.data.organizations || orgRes.data.data || [])
+        if (deptRes.ok && deptRes.data?.status) setDepartments(deptRes.data.departments || deptRes.data.data || [])
+        if (desigRes.ok && desigRes.data?.status) setDesignations(desigRes.data.designations || desigRes.data.data || [])
+        if (usersRes.ok && usersRes.data?.status) {
+          const tm = (usersRes.data.users || []).map((u: AdminUserSummary) => ({ id: String(u.id), name: u.name, email: u.email }))
+          setTeamMembers(tm)
+        }
+      } catch (error) {
+        console.error('Error loading dropdowns:', error)
       }
     }
     loadDropdowns()
-  }, [token])
+  }, [api, token])
 
   const openCreate = () => {
     setFormMode('create')
@@ -100,27 +109,33 @@ const UserManagementPage = () => {
     setIsFormOpen(true)
     setEditLoading(true)
     ;(async () => {
-      const { ok, data } = await getAdminUser(token, user.id)
-      if (ok && data?.status && data.data) {
-        const d = data.data
-        setEditInitial({
-          name: d.name || '',
-          firstName: d.firstName || '',
-          lastName: d.lastName || '',
-          employeeId: d.employeeId || '',
-          email: d.email || '',
-          mobileNo: d.mobileNo || '',
-          role: d.role || '',
-          organisationId: d.organisation?.id || '',
-          departmentId: d.department?.id || '',
-          designationId: d.designation?.id || '',
-          reportingTeamLeaderId: d.teamLeader?.id || '',
-          reportingTeamManagerId: d.teamManager?.id || '',
-        })
-      } else {
+      try {
+        const { ok, data } = await api.getAdminUser(token, user.id)
+        if (ok && data?.status && data.data) {
+          const d = data.data
+          setEditInitial({
+            name: d.name || '',
+            firstName: d.firstName || '',
+            lastName: d.lastName || '',
+            employeeId: d.employeeId || '',
+            email: d.email || '',
+            mobileNo: d.mobileNo || '',
+            role: d.role || '',
+            organisationId: d.organisation?.id || '',
+            departmentId: d.department?.id || '',
+            designationId: d.designation?.id || '',
+            reportingTeamLeaderId: d.teamLeader?.id || '',
+            reportingTeamManagerId: d.teamManager?.id || '',
+          })
+        } else {
+          setEditInitial({ name: user.name, email: user.email, role: user.role || '' })
+        }
+      } catch (error) {
+        console.error('Error loading user details:', error)
         setEditInitial({ name: user.name, email: user.email, role: user.role || '' })
+      } finally {
+        setEditLoading(false)
       }
-      setEditLoading(false)
     })()
   }
 
@@ -133,7 +148,7 @@ const UserManagementPage = () => {
     setSubmitting(true)
     try {
       if (formMode === 'create') {
-        const { ok, data } = await createAdminUser(token, {
+        const { ok, data } = await api.createAdminUser(token, {
           ...values,
           password: values.password || '',
         })
@@ -144,7 +159,7 @@ const UserManagementPage = () => {
           alert(data?.message || 'Failed to create user')
         }
       } else if (selectedUser) {
-        const { ok, data } = await updateAdminUser(token, selectedUser.id, {
+        const { ok, data } = await api.updateAdminUser(token, selectedUser.id, {
           ...values,
         })
         if (ok && data?.status) {
@@ -154,6 +169,9 @@ const UserManagementPage = () => {
           alert(data?.message || 'Failed to update user')
         }
       }
+    } catch (error) {
+      console.error('Error submitting user:', error)
+      alert('An error occurred while saving the user')
     } finally {
       setSubmitting(false)
     }
@@ -163,13 +181,16 @@ const UserManagementPage = () => {
     if (!selectedUser) return
     setSubmitting(true)
     try {
-      const { ok, data } = await deleteAdminUser(token, selectedUser.id)
+      const { ok, data } = await api.deleteAdminUser(token, selectedUser.id)
       if (ok && data?.status) {
         setIsDeleteOpen(false)
         await loadUsers()
       } else {
         alert(data?.message || 'Failed to delete user')
       }
+    } catch (error) {
+      console.error('Error deleting user:', error)
+      alert('An error occurred while deleting the user')
     } finally {
       setSubmitting(false)
     }

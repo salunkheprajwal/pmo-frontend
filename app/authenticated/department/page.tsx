@@ -1,12 +1,9 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import {
-  Department,
-  getDepartments,
-  deleteDepartment,
-} from '@/app/utils/api/department';
-import { Organization, getOrganizations } from '@/app/utils/api/organization';
+import { Department } from '@/app/utils/api/department';
+import { Organization } from '@/app/utils/api/organization';
+import { useApi } from '@/app/context/ApiContext';
 import DepartmentList from '@/app/components/department/DepartmentList';
 import DepartmentForm from '@/app/components/department/DepartmentForm';
 import Modal from '@/app/components/shared/Modal';
@@ -24,6 +21,8 @@ export default function DepartmentPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [token, setToken] = useState<string>('');
 
+  const api = useApi();
+
   useEffect(() => {
     // Get token from localStorage or sessionStorage
     const storedToken = localStorage.getItem('token') || 
@@ -39,8 +38,8 @@ export default function DepartmentPage() {
   const fetchData = async (authToken: string) => {
     try {
       const [deptsResponse, orgsResponse] = await Promise.all([
-        getDepartments(authToken),
-        getOrganizations(authToken),
+        api.getDepartments(authToken),
+        api.getOrganizations(authToken),
       ]);
 
       if (deptsResponse.ok && deptsResponse.data.status) {
@@ -71,7 +70,7 @@ export default function DepartmentPage() {
     if (!deleteTarget || !token) return;
 
     try {
-      const response = await deleteDepartment(token, deleteTarget.id);
+      const response = await api.deleteDepartment(token, deleteTarget.id);
       if (response.ok) {
         await fetchData(token);
       }
