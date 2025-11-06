@@ -1,6 +1,6 @@
 import { getBase } from './shared';
 
-export class ApiClient {
+export class apiMethod {
   private token: string | null = null;
 
   setToken(token: string | null) {

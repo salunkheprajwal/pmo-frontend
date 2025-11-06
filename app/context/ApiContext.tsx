@@ -1,10 +1,10 @@
 "use client";
 import React, { createContext, useContext, ReactNode, useEffect } from "react";
 import api from "../utils/api";
-import { ApiClient } from "../utils/api/apiClient";
+import { apiMethod } from "../utils/api/apiMethod";
 import { useToken } from "./TokenContext";
 
-const apiClient = new ApiClient();
+const apiClient = new apiMethod();
 const ApiContext = createContext(api);
 
 export const useApi = () => {

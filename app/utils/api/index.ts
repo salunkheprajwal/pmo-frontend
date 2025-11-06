@@ -7,6 +7,7 @@ export * from './organization'
 export * from './department'
 export * from './role'
 export * from './designation'
+export * from './client'
 
 // Build a default export similar to the previous single-file API default export
 import * as auth from './auth'
@@ -16,6 +17,7 @@ import * as organization from './organization'
 import * as department from './department'
 import * as role from './role'
 import * as designation from './designation'
+import * as client from './client'
 
 const defaultExport = {
   // auth
@@ -34,6 +36,8 @@ const defaultExport = {
   ...role,
   // designation
   ...designation,
+  // client
+  ...client,
 }
 
 export default defaultExport
