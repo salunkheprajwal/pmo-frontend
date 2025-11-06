@@ -6,9 +6,11 @@ import ConfirmDialog from '../shared/ConfirmDialog';
 import DesignationForm from './DesignationForm';
 import { Designation } from '@/app/utils/api/designation';
 import { useApi } from '@/app/context/ApiContext';
+import { useToken } from '@/app/context/TokenContext';
 
 export default function DesignationList() {
   const api = useApi();
+  const { token } = useToken();
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
@@ -19,8 +21,7 @@ export default function DesignationList() {
   const fetchDesignations = async () => {
     try {
       setIsLoading(true);
-      const token = localStorage.getItem('token') || '';
-      const response = await api.getDesignations(token);
+      const response = await api.getDesignations(token || '');
       if (response.ok && response.data.data) {
         setDesignations(response.data.data);
       }
@@ -37,8 +38,7 @@ export default function DesignationList() {
 
   const handleAdd = async (data: { name: string; description: string }) => {
     try {
-      const token = localStorage.getItem('token') || '';
-      const response = await api.createDesignation(token, data);
+      const response = await api.createDesignation(token || '', data);
       if (response.ok) {
         await fetchDesignations();
         setIsAddModalOpen(false);
@@ -51,8 +51,7 @@ export default function DesignationList() {
   const handleEdit = async (data: { name: string; description: string }) => {
     try {
       if (!selectedDesignation) return;
-      const token = localStorage.getItem('token') || '';
-      const response = await api.updateDesignation(token, selectedDesignation.id, data);
+      const response = await api.updateDesignation(token || '', selectedDesignation.id, data);
       if (response.ok) {
         await fetchDesignations();
         setIsEditModalOpen(false);
@@ -66,8 +65,7 @@ export default function DesignationList() {
   const handleDelete = async () => {
     try {
       if (!selectedDesignation) return;
-      const token = localStorage.getItem('token') || '';
-      const response = await api.deleteDesignation(token, selectedDesignation.id);
+      const response = await api.deleteDesignation(token || '', selectedDesignation.id);
       if (response.ok) {
         await fetchDesignations();
         setIsDeleteDialogOpen(false);

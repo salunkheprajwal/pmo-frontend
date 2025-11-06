@@ -1,7 +1,10 @@
 "use client";
-import React, { createContext, useContext, ReactNode } from "react";
+import React, { createContext, useContext, ReactNode, useEffect } from "react";
 import api from "../utils/api";
+import { ApiClient } from "../utils/api/apiClient";
+import { useToken } from "./TokenContext";
 
+const apiClient = new ApiClient();
 const ApiContext = createContext(api);
 
 export const useApi = () => {
@@ -13,6 +16,12 @@ export const useApi = () => {
 };
 
 export const ApiProvider = ({ children }: { children: ReactNode }) => {
+  const { token } = useToken();
+
+  useEffect(() => {
+    apiClient.setToken(token);
+  }, [token]);
+
   return (
     <ApiContext.Provider value={api}>
       {children}

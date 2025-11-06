@@ -12,10 +12,21 @@ import { Organization } from '@/app/utils/api/organization'
 import { Department } from '@/app/utils/api/department'
 import { Designation } from '@/app/utils/api/designation'
 import { useApi } from '@/app/context/ApiContext'
+import { useToken } from '@/app/context/TokenContext'
 
 const UserManagementPage = () => {
   const api = useApi()
+  const { token } = useToken()
   const [users, setUsers] = useState<UserRow[]>([])
+  
+  const getTokenOrRedirect = () => {
+    if (!token) {
+      // Redirect to login if no token
+      window.location.href = '/auth/login'
+      return null
+    }
+    return token
+  }
   const [loading, setLoading] = useState<boolean>(false)
   const [isFormOpen, setIsFormOpen] = useState<boolean>(false)
   const [isDeleteOpen, setIsDeleteOpen] = useState<boolean>(false)
@@ -29,9 +40,9 @@ const UserManagementPage = () => {
   const [departments, setDepartments] = useState<Department[]>([])
   const [designations, setDesignations] = useState<Designation[]>([])
   const [teamMembers, setTeamMembers] = useState<{ id: string; name: string; email: string }[]>([])
-  const token = useMemo(() => (typeof window !== 'undefined' ? localStorage.getItem('token') || '' : ''), [])
 
   const loadUsers = useCallback(async () => {
+    if (!token) return;
     setLoading(true)
     try {
       const { ok, data } = await api.getAdminUsers(token)
@@ -71,14 +82,16 @@ const UserManagementPage = () => {
 
   useEffect(() => {
     const loadDropdowns = async () => {
-      if (!token) return
+      const currentToken = getTokenOrRedirect();
+      if (!currentToken) return;
+
       try {
         const [rolesRes, orgRes, deptRes, desigRes, usersRes] = await Promise.all([
-          api.getRoles(token),
-          api.getOrganizations(token),
-          api.getDepartments(token),
-          api.getDesignations(token),
-          api.getAdminUsers(token),
+          api.getRoles(currentToken),
+          api.getOrganizations(currentToken),
+          api.getDepartments(currentToken),
+          api.getDesignations(currentToken),
+          api.getAdminUsers(currentToken),
         ])
 
         if (rolesRes.ok && rolesRes.data?.status) setRoles(rolesRes.data.roles || rolesRes.data.data || [])
@@ -109,8 +122,11 @@ const UserManagementPage = () => {
     setIsFormOpen(true)
     setEditLoading(true)
     ;(async () => {
+      const currentToken = getTokenOrRedirect();
+      if (!currentToken) return;
+      
       try {
-        const { ok, data } = await api.getAdminUser(token, user.id)
+        const { ok, data } = await api.getAdminUser(currentToken, user.id)
         if (ok && data?.status && data.data) {
           const d = data.data
           setEditInitial({
@@ -145,10 +161,13 @@ const UserManagementPage = () => {
   }
 
   const handleSubmit = async (values: UserFormValues) => {
+    const currentToken = getTokenOrRedirect();
+    if (!currentToken) return;
+    
     setSubmitting(true)
     try {
       if (formMode === 'create') {
-        const { ok, data } = await api.createAdminUser(token, {
+        const { ok, data } = await api.createAdminUser(currentToken, {
           ...values,
           password: values.password || '',
         })
@@ -159,7 +178,7 @@ const UserManagementPage = () => {
           alert(data?.message || 'Failed to create user')
         }
       } else if (selectedUser) {
-        const { ok, data } = await api.updateAdminUser(token, selectedUser.id, {
+        const { ok, data } = await api.updateAdminUser(currentToken, selectedUser.id, {
           ...values,
         })
         if (ok && data?.status) {
@@ -179,9 +198,12 @@ const UserManagementPage = () => {
 
   const handleDelete = async () => {
     if (!selectedUser) return
+    const currentToken = getTokenOrRedirect();
+    if (!currentToken) return;
+    
     setSubmitting(true)
     try {
-      const { ok, data } = await api.deleteAdminUser(token, selectedUser.id)
+      const { ok, data } = await api.deleteAdminUser(currentToken, selectedUser.id)
       if (ok && data?.status) {
         setIsDeleteOpen(false)
         await loadUsers()
@@ -223,7 +245,7 @@ const UserManagementPage = () => {
             onSubmit={handleSubmit}
             onCancel={() => setIsFormOpen(false)}
             isSubmitting={submitting}
-            token={token}
+            token={token || ''}
             roles={roles}
             organizations={organizations}
             departments={departments}

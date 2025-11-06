@@ -4,14 +4,17 @@ import { useEffect, useState } from 'react';
 import { Department } from '@/app/utils/api/department';
 import { Organization } from '@/app/utils/api/organization';
 import { useApi } from '@/app/context/ApiContext';
+import { useToken } from '@/app/context/TokenContext';
 import DepartmentList from '@/app/components/department/DepartmentList';
 import DepartmentForm from '@/app/components/department/DepartmentForm';
 import Modal from '@/app/components/shared/Modal';
 import ConfirmDialog from '@/app/components/shared/ConfirmDialog';
 import Button from '@/app/components/shared/Button';
 import { Plus } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 
 export default function DepartmentPage() {
+  const router = useRouter();
   const [departments, setDepartments] = useState<Department[]>([]);
   const [organizations, setOrganizations] = useState<Organization[]>([]);
   const [selectedDepartment, setSelectedDepartment] = useState<Department | null>(null);
@@ -19,23 +22,20 @@ export default function DepartmentPage() {
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
   const [deleteTarget, setDeleteTarget] = useState<Department | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [token, setToken] = useState<string>('');
-
   const api = useApi();
+  const { token } = useToken();
 
   useEffect(() => {
-    // Get token from localStorage or sessionStorage
-    const storedToken = localStorage.getItem('token') || 
-                       sessionStorage.getItem('token') || 
-                       localStorage.getItem('authToken') || 
-                       sessionStorage.getItem('authToken');
-    if (storedToken) {
-      setToken(storedToken);
-      fetchData(storedToken);
+    if (!token) {
+      router.push('/auth/login');
+      return;
     }
-  }, []);
+    fetchData(token);
+  }, [token]);
 
-  const fetchData = async (authToken: string) => {
+  const fetchData = async (authToken: string | null) => {
+    if (!authToken) return;
+    
     try {
       const [deptsResponse, orgsResponse] = await Promise.all([
         api.getDepartments(authToken),
@@ -149,7 +149,7 @@ export default function DepartmentPage() {
         <DepartmentForm
           initialData={selectedDepartment || undefined}
           organizations={organizations}
-          token={token}
+          token={token || ''}
           onSuccess={handleFormSuccess}
           onCancel={() => {
             setIsModalOpen(false);

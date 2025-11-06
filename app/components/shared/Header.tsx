@@ -6,6 +6,7 @@ import { useApi } from '../../context/ApiContext'
 import { decodeToken } from '@/app/utils/api/shared'
 import { useTheme } from '../ThemeProvider'
 import { Sun, Moon } from 'lucide-react'
+import { useToken } from '@/app/context/TokenContext'
 
 interface HeaderProps {
   toggleSidebar: () => void
@@ -36,12 +37,11 @@ const Header = ({ toggleSidebar }: HeaderProps) => {
   const [isLoggingOut, setIsLoggingOut] = useState(false)
   const { theme, toggleTheme } = useTheme()
   const router = useRouter()
-
+  const { token, setToken } = useToken()
   const api = useApi()
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const token = localStorage.getItem('token') || sessionStorage.getItem('token') || localStorage.getItem('authToken') || sessionStorage.getItem('authToken')
         if (!token) {
           setLoading(false)
           return
@@ -98,11 +98,8 @@ const Header = ({ toggleSidebar }: HeaderProps) => {
     setIsLoggingOut(true)
     
     try {
-      // Clear all possible token storage locations
-      localStorage.removeItem('token')
-      localStorage.removeItem('authToken')
-      sessionStorage.removeItem('token')
-      sessionStorage.removeItem('authToken')
+      // Clear token using TokenContext
+      setToken(null)
       
       // Clear any other user-related data you might have stored
       localStorage.removeItem('user')

@@ -5,10 +5,12 @@ import { useRouter } from 'next/navigation'
 import Input from '../shared/Input'
 import Button from '../shared/Button'
 import { useApi } from '@/app/context/ApiContext'
+import { useToken } from '@/app/context/TokenContext'
 
 const LoginForm = () => {
   const router = useRouter()
   const api = useApi()
+  const { setToken } = useToken()
   const [identifier, setIdentifier] = useState('') // Changed from email to identifier
   const [password, setPassword] = useState('')
   const [isLoading, setIsLoading] = useState(false)
@@ -69,7 +71,7 @@ const LoginForm = () => {
       if (data?.status) {
         // Store token if present
         if (data.token) {
-          localStorage.setItem('token', data.token)
+          setToken(data.token)
         }
         router.push('/authenticated/dashboard')
       } else {
