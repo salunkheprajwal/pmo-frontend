@@ -6,11 +6,9 @@ import ConfirmDialog from '../shared/ConfirmDialog';
 import RoleForm from './RoleForm';
 import { Role } from '@/app/utils/api/role';
 import { useApi } from '@/app/context/ApiContext';
-import { useToken } from '@/app/context/TokenContext';
 
 export default function RoleList() {
   const api = useApi();
-  const { token } = useToken();
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
@@ -18,13 +16,13 @@ export default function RoleList() {
   const [roles, setRoles] = useState<Role[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
+  // ✅ Fetch roles
   const fetchRoles = async () => {
     try {
       setIsLoading(true);
-      const response = await api.getRoles(token || '');
+  const response = await api.getRoles();
       if (response.ok && response.data.data) {
         setRoles(response.data.data);
-   
       }
     } catch (error) {
       console.error('Error fetching roles:', error);
@@ -37,11 +35,12 @@ export default function RoleList() {
     fetchRoles();
   }, []);
 
+  // ✅ Handle Add Role
   const handleAdd = async (data: { name: string; description: string }) => {
     try {
-      const response = await api.createRole(token || '', data);
+  const response = await api.createRole(data);
       if (response.ok) {
-        await fetchRoles();
+        await fetchRoles(); // 🔄 Refresh instantly
         setIsAddModalOpen(false);
       }
     } catch (error) {
@@ -49,12 +48,13 @@ export default function RoleList() {
     }
   };
 
+  // ✅ Handle Edit Role
   const handleEdit = async (data: { name: string; description: string }) => {
     try {
       if (!selectedRole) return;
-      const response = await api.updateRole(token || '', selectedRole.id, data);
+  const response = await api.updateRole(selectedRole.id, data);
       if (response.ok) {
-        await fetchRoles();
+        await fetchRoles(); // 🔄 Refresh instantly
         setIsEditModalOpen(false);
         setSelectedRole(null);
       }
@@ -63,12 +63,13 @@ export default function RoleList() {
     }
   };
 
+  // ✅ Handle Delete Role
   const handleDelete = async () => {
     try {
       if (!selectedRole) return;
-      const response = await api.deleteRole(token || '', selectedRole.id);
+  const response = await api.deleteRole(selectedRole.id);
       if (response.ok) {
-        await fetchRoles();
+        await fetchRoles(); // 🔄 Refresh instantly
         setIsDeleteDialogOpen(false);
         setSelectedRole(null);
       }
@@ -77,9 +78,10 @@ export default function RoleList() {
     }
   };
 
+  // ✅ Table columns
   const columns: Column<Role>[] = [
     { key: 'name', header: 'Name' },
-    { key: 'description', header: 'Description' }
+    { key: 'description', header: 'Description' },
   ];
 
   return (
@@ -103,12 +105,17 @@ export default function RoleList() {
         }}
       />
 
+      {/* ✅ Add Role Modal */}
       <RoleForm
         isOpen={isAddModalOpen}
         onClose={() => setIsAddModalOpen(false)}
-        onSubmit={handleAdd}
+        onSuccess={async () => {
+          await fetchRoles();
+          setIsAddModalOpen(false);
+        }}
       />
 
+      {/* ✅ Edit Role Modal */}
       {selectedRole && (
         <RoleForm
           isOpen={isEditModalOpen}
@@ -116,14 +123,20 @@ export default function RoleList() {
             setIsEditModalOpen(false);
             setSelectedRole(null);
           }}
-          onSubmit={handleEdit}
           initialData={{
+            id: selectedRole.id,
             name: selectedRole.name,
-            description: selectedRole.description || ''
+            description: selectedRole.description || '',
+          }}
+          onSuccess={async () => {
+            await fetchRoles();
+            setIsEditModalOpen(false);
+            setSelectedRole(null);
           }}
         />
       )}
 
+      {/* ✅ Delete Confirmation */}
       <ConfirmDialog
         isOpen={isDeleteDialogOpen}
         title="Delete Role"
