@@ -20,7 +20,7 @@ export class ApiClient {
 
     // Add token to headers if available
     if (this.token) {
-      headers['Authorization'] = `Bearer ${this.token}`;
+      (headers as Headers).set('Authorization', `Bearer ${this.token}`);
     }
 
     const response = await fetch(`${apiBase}${endpoint}`, {

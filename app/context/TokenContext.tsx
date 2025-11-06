@@ -10,16 +10,19 @@ type TokenContextType = {
 const TokenContext = createContext<TokenContextType | undefined>(undefined);
 
 export function TokenProvider({ children }: { children: React.ReactNode }) {
-  const [token, setToken] = useState<string | null>(null);
+  const [token, setToken] = useState<string | null>(() => {
+    // Initialize from localStorage if we're in the browser
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem('token');
+    }
+    return null;
+  });
+
+  const [isInitialized, setIsInitialized] = useState(false);
 
   useEffect(() => {
-    // Check if token exists in localStorage when component mounts
-    if (typeof window !== 'undefined') {
-      const storedToken = localStorage.getItem('token');
-      if (storedToken) {
-        setToken(storedToken);
-      }
-    }
+    // Set initialized flag after hydration
+    setIsInitialized(true);
   }, []);
 
   const updateToken = (newToken: string | null) => {
